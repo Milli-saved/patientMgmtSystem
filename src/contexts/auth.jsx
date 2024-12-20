@@ -7,12 +7,15 @@ export const AuthContext = createContext();
 const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
 
-  const [user, setUser] = useState(null);
-  const [token, setToken] = useState(localStorage.getItem('token'));
+  const [user, setUser] = useState({
+    name: "Million",
+    role: "super_user",
+  });
+  const [token, setToken] = useState(localStorage.getItem("token"));
   const [station, setStation] = useState("");
   const [userStationId, setUserStationId] = useState("");
   const [roles, setRoles] = useState("");
- console.log("user:",user)
+  console.log("user:", user);
   useEffect(() => {
     if (user) {
       return;
@@ -24,7 +27,6 @@ const AuthProvider = ({ children }) => {
     } catch (error) {
       navigate("/signin");
     }
-
   }, [token]);
 
   return (
