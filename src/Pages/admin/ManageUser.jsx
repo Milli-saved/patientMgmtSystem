@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import Table from "../../components/Table";
 import { FaDownload, FaPlus } from "react-icons/fa";
+import AddNewUser from "./AddNewUserModal";
 
 const ManageUser = () => {
+  const [addNewUser, setAddNewUser] = useState(false);
   const data = [
     {
       name: "Cherry Delight",
@@ -32,6 +34,11 @@ const ManageUser = () => {
       color: "bg-red-100 text-red-700",
     },
   ];
+
+  const handleAddNewUser = () => {
+    setAddNewUser(false);
+  };
+
   return (
     <div className="mx-20">
       <h1 className="m-5 text-5xl font-semibold text-gray-800">Manage User</h1>
@@ -47,7 +54,10 @@ const ManageUser = () => {
           </button>
         </div> */}
         <div>
-          <button className="px-5 py-3 text-white bg-blue-900 mx-5 rounded-xl">
+          <button
+            onClick={() => setAddNewUser(true)}
+            className="px-5 py-3 text-white bg-blue-900 mx-5 rounded-xl"
+          >
             <span className="flex items-center justify-evenly">
               <FaPlus className="mr-2" />
               New
@@ -64,6 +74,7 @@ const ManageUser = () => {
       <div className="mt-10">
         <Table data={data} />
       </div>
+      {addNewUser && <AddNewUser handleAddNewUser={handleAddNewUser} />}
     </div>
   );
 };

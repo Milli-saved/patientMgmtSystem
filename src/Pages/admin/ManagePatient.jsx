@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import Table from "../../components/Table";
 import { FaDownload, FaPlus } from "react-icons/fa";
+import AddNewPatient from "./AddNewPatientModal";
 
 const ManagePatient = () => {
+  const [addNewPatient, setAddNewPatient] = useState(false);
   const data = [
     {
       name: "Cherry Delight",
@@ -32,6 +34,9 @@ const ManagePatient = () => {
       color: "bg-red-100 text-red-700",
     },
   ];
+  const handleAddNewPatient = () => {
+    setAddNewPatient(false);
+  };
   return (
     <div className="mx-20">
       <h1 className="m-5 text-5xl font-semibold text-gray-800">
@@ -49,7 +54,10 @@ const ManagePatient = () => {
           </button>
         </div> */}
         <div>
-          <button className="px-5 py-3 text-white bg-blue-900 mx-5 rounded-xl">
+          <button
+            onClick={() => setAddNewPatient(true)}
+            className="px-5 py-3 text-white bg-blue-900 mx-5 rounded-xl"
+          >
             <span className="flex items-center justify-evenly">
               <FaPlus className="mr-2" />
               New
@@ -66,6 +74,9 @@ const ManagePatient = () => {
       <div className="mt-10">
         <Table data={data} />
       </div>
+      {addNewPatient && (
+        <AddNewPatient handleAddNewPatient={handleAddNewPatient} />
+      )}
     </div>
   );
 };
