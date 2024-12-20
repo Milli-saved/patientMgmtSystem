@@ -15,7 +15,6 @@ const AuthProvider = ({ children }) => {
   const [station, setStation] = useState("");
   const [userStationId, setUserStationId] = useState("");
   const [roles, setRoles] = useState("");
-  console.log("user:", user);
   useEffect(() => {
     if (user) {
       return;

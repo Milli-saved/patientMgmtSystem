@@ -5,6 +5,7 @@ import Signin from "../../Pages/auth/signin";
 import NavigationSideBar from "../NavigationSidebar/index";
 import { ProtectedRoute } from "./ProtectedRoute";
 import NavBar from "../NavBar";
+import ResetPassword from "../../Pages/auth/ResetPassword";
 
 function Layout() {
   return (
@@ -17,6 +18,7 @@ function Layout() {
           </AuthProvider>
         }
       />
+      <Route path="/resetpassword" element={<ResetPassword />} />
       <Route
         path="*"
         element={

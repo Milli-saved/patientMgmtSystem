@@ -21,12 +21,10 @@ function NavigationSidebar() {
 
   const rolesMenu = useMemo(() => {
     return Object.keys(RoleBasedViews[user.role].routes).map((key) => {
-      console.log(RoleBasedViews[user.role].routes[key]);
       const { icons, label, bool } = RoleBasedViews[user.role].routes[key];
       return { Icon: icons, label, to: key, bool };
     });
   }, [user.role.auth_role_id]);
-  console.log("object", rolesMenu);
 
   return (
     <div className="flex flex-col h-screen bg-slate-100 transition-all duration-300">
