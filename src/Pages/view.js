@@ -16,6 +16,7 @@ import PhysicianSettings from "./Physician/PhysicianSettings";
 import LabHome from "./Lab/LabHome";
 import LabReport from "./Lab/Report";
 import LabSettings from "./Lab/Settings";
+import HealthOfficerHome from "./HealthOfficer/HealthOfficerHome";
 
 const RoleBasedViews = {
   super_user: {
@@ -105,6 +106,16 @@ const RoleBasedViews = {
         label: "Settings",
         component: React.createElement(LabSettings),
         icons: FaGear,
+      },
+    },
+  },
+  Health_Officer: {
+    name: "Health Officer",
+    routes: {
+      "/": {
+        label: "Manage Health Center",
+        component: React.createElement(HealthOfficerHome),
+        icons: FaHome,
       },
     },
   },
