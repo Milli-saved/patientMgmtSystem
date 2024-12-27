@@ -27,7 +27,7 @@ function NavigationSidebar() {
   }, [user.role.auth_role_id]);
 
   return (
-    <div className="flex flex-col h-screen bg-slate-100 transition-all duration-300">
+    <div className="flex flex-col h-screen bg-slate-100 transition-all duration-300 min-w-[200px]">
       <h1 className="mt-10 text-blue-600 text-center font-bold text-3xl">
         PIMS
       </h1>

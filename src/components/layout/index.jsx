@@ -39,7 +39,7 @@ function ResponsiveLayout() {
         className={`flex flex-col justify-between flex-grow overflow-y-auto`}
       >
         <NavBar />
-        <main className="flex-grow">
+        <main className="flex-grow font-work">
           <AuthenticatedRoutes />
         </main>
       </div>
@@ -54,6 +54,10 @@ function AuthenticatedRoutes() {
       <Route path="/manage-patients" element={<ProtectedRoute />} />
       <Route path="/manage-health-center" element={<ProtectedRoute />} />
       <Route path="/manage-user" element={<ProtectedRoute />} />
+      <Route path="/settings" element={<ProtectedRoute />} />
+      <Route path="/referrals" element={<ProtectedRoute />} />
+      <Route path="/labtestandprescription" element={<ProtectedRoute />} />
+      <Route path="/report" element={<ProtectedRoute />} />
     </Routes>
   );
 }

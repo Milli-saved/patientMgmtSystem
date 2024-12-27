@@ -9,7 +9,7 @@ const AuthProvider = ({ children }) => {
 
   const [user, setUser] = useState({
     name: "Million",
-    role: "super_user",
+    role: "Lab",
   });
   const [token, setToken] = useState(localStorage.getItem("token"));
   const [station, setStation] = useState("");
