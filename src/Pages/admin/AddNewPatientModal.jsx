@@ -1,6 +1,34 @@
+import { useMutation } from "@tanstack/react-query";
 import React from "react";
 
+const createPatient = async (patient) => {
+  const response = await fetch(
+    `${process.env.REACT_APP_API_URL}/v1/users/add_employee`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(patient),
+    }
+  );
+  if (!response.ok) throw new Error("Failed to create patient");
+  return response.json();
+};
+
 const AddNewPatient = ({ handleAddNewPatient }) => {
+  const addPatientMutation = useMutation({
+    mutationFn: addUser,
+    onSuccess: () => {
+      toast.success("Patient created successfully");
+      queryClient.invalidateQueries(["patient"]);
+      closeModal();
+    },
+    onError: () => {
+      toast.error("Error adding Patient");
+    },
+  });
+
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-transparent backdrop-blur-sm z-50 overflow-auto">
       <div className="relative p-4 w-[60%] max-h-full">

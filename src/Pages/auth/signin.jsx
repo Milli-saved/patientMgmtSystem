@@ -1,6 +1,76 @@
-import React from "react";
+import React, { useState } from "react";
 
 const Signin = () => {
+  const [credentials, setCredentials] = useState({
+    userId: "",
+    password: "",
+  });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+
+  const changeHandler = (e) => {
+    const { name, value } = e.target;
+
+    setCredentials({
+      ...credentials,
+      [name]: value,
+    });
+  };
+
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    try {
+      setLoading(true);
+      console.log("env:");
+      // console.log("env:", import.meta.env.VITE_API_URL);
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/user/login`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(credentials),
+        }
+      );
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log("the result: ", result);
+        const decodedToken = jwtDecode(result.token);
+        const role = decodedToken.data?.role?.auth_role_id;
+        const roleBasedView = RoleBasedViews[role];
+        if (roleBasedView && roleBasedView.routes) {
+          const roles_menu = Object.keys(roleBasedView?.routes)?.map((key) => {
+            const { icon, label } = roleBasedView.routes[key];
+            return { Icon: icon, label, to: key };
+          });
+
+          if (roles_menu && roles_menu.length > 0) {
+            localStorage.setItem("token", result.token);
+            setToken(result.token);
+            navigate(roles_menu[0].to);
+          } else {
+            setError(
+              "No menus access has been granted to you. Please contact your administrator"
+            );
+          }
+        } else {
+          setError("Invalid role or role-based view configuration");
+        }
+      } else {
+        throw new Error("Invalid response from server");
+      }
+    } catch (error) {
+      setLoading(false);
+      setError(
+        "Either phone number or password is incorrect. Please try again."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <section className="bg-gray-50">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
@@ -16,7 +86,7 @@ const Signin = () => {
             <h1 className="text-xl font-normal leading-tight tracking-tight text-center text-gray-600 md:text-lg">
               Welcome to patient information management system
             </h1>
-            <form className="space-y-4 md:space-y-6">
+            <form onSubmit={submitHandler} className="space-y-4 md:space-y-6">
               <div className="flex flex-col items-start">
                 <label
                   htmlFor="userId"
@@ -27,6 +97,7 @@ const Signin = () => {
                 <input
                   id="userId"
                   name="userId"
+                  onChange={changeHandler}
                   type="text"
                   autoComplete="User Id"
                   placeholder="User Id"
@@ -43,6 +114,7 @@ const Signin = () => {
                 <input
                   id="password"
                   name="password"
+                  onChange={changeHandler}
                   type="password"
                   autoComplete="Current Password"
                   placeholder="******"
@@ -58,7 +130,8 @@ const Signin = () => {
               </div>
               <button
                 type="submit"
-                className="w-full text-white bg-blue-950 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                disabled={loading}
+                className="w-full disabled:cursor-not-allowed text-white bg-blue-950 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
               >
                 Login
               </button>

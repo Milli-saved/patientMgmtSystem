@@ -1,9 +1,26 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import Table from "../../components/Table";
 import { FaDownload, FaPlus } from "react-icons/fa";
 import AddNewPatient from "./AddNewPatientModal";
+import { AuthContext } from "../../contexts/auth";
+
+const getPatients = async (token) => {
+  const response = await fetch(
+    `${import.meta.env.VITE_API_URL}/patient/getPatient/P100001`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  if (!response.ok) throw new Error("Error fetching users");
+  return response.json();
+};
 
 const ManagePatient = () => {
+  const { token } = useContext(AuthContext);
+  const queryClient = useQueryClient();
   const [addNewPatient, setAddNewPatient] = useState(false);
   const data = [
     {
@@ -37,6 +54,14 @@ const ManagePatient = () => {
   const handleAddNewPatient = () => {
     setAddNewPatient(false);
   };
+
+  const { data: patientData, isLoading: userLoading } = useQuery({
+    queryKey: ["patient"],
+    queryFn: () => getPatients(token),
+  });
+
+  console.log("Here is the patientData: ", patientData);
+
   return (
     <div className="mx-20">
       <h1 className="m-5 text-5xl font-semibold text-gray-800">
