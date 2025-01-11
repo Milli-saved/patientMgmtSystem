@@ -1,6 +1,59 @@
-import React from "react";
+import { useMutation } from "@tanstack/react-query";
+import React, { useState } from "react";
+
+const createNewUser = async (userData) => {
+  const response = await fetch(
+    `${process.env.REACT_APP_API_URL}/v1/users/add_employee`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(userData),
+    }
+  );
+  if (!response.ok) throw new Error("Failed to create user");
+  return response.json();
+};
 
 const AddNewUser = ({ handleAddNewUser }) => {
+  const [userDetails, setUserDetails] = useState({
+    userName: "",
+    password: "",
+    fullName: "",
+    email: "",
+    specialist: [],
+    department: "",
+    role: "",
+    phoneNumber: "",
+  });
+
+  const changeHandler = (e) => {
+    const { name, value } = e.target;
+
+    setUserDetails({
+      ...userDetails,
+      [name]: value,
+    });
+  };
+  const addUserMutation = useMutation({
+    mutationFn: createNewUser,
+    onSuccess: () => {
+      toast.success("user created successfully");
+      queryClient.invalidateQueries(["allUsers"]);
+      closeModal();
+    },
+    onError: () => {
+      toast.error("Error adding Patient");
+    },
+  });
+
+  const submitHandler = (e) => {
+    e.preventDefault();
+    console.log("the user dtails: ", userDetails);
+    addUserMutation.mutate(userDetails);
+  };
+
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-transparent backdrop-blur-sm z-50 overflow-auto">
       <div className="relative p-4 w-[60%] max-h-full">
@@ -32,7 +85,7 @@ const AddNewUser = ({ handleAddNewUser }) => {
               <span className="sr-only">Close modal</span>
             </button>
           </div>
-          <form className="p-4 md:p-5">
+          <form onSubmit={submitHandler} className="p-4 md:p-5">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div className="flex flex-col items-start mt-5">
                 <label
@@ -52,11 +105,12 @@ const AddNewUser = ({ handleAddNewUser }) => {
                   htmlFor="userId"
                   className="block mb-2 text-lg text-blue-700 font-medium"
                 >
-                  User Role
+                  User Name
                 </label>
                 <input
                   id="healtcenterName"
-                  name="healtcenterName"
+                  name="userName"
+                  onChange={changeHandler}
                   type="text"
                   autoComplete="Current Password"
                   placeholder="Health Center Name"
@@ -72,7 +126,8 @@ const AddNewUser = ({ handleAddNewUser }) => {
                 </label>
                 <input
                   id="healtcenterName"
-                  name="healtcenterName"
+                  name="fullName"
+                  onChange={changeHandler}
                   type="text"
                   autoComplete="Current Password"
                   placeholder="Health Center Name"
@@ -100,7 +155,8 @@ const AddNewUser = ({ handleAddNewUser }) => {
                 </label>
                 <input
                   id="healtcenterName"
-                  name="healtcenterName"
+                  name="phoneNumber"
+                  onChange={changeHandler}
                   type="text"
                   autoComplete="Current Password"
                   placeholder="Health Center Name"
@@ -112,11 +168,12 @@ const AddNewUser = ({ handleAddNewUser }) => {
                   htmlFor="userId"
                   className="block mb-2 text-lg text-blue-700 font-medium"
                 >
-                  Nationality
+                  Role
                 </label>
                 <input
                   id="healtcenterName"
-                  name="healtcenterName"
+                  name="role"
+                  onChange={changeHandler}
                   type="text"
                   autoComplete="Current Password"
                   placeholder="Health Center Name"
@@ -132,7 +189,8 @@ const AddNewUser = ({ handleAddNewUser }) => {
                 </label>
                 <input
                   id="healtcenterName"
-                  name="healtcenterName"
+                  name="email"
+                  onChange={changeHandler}
                   type="text"
                   autoComplete="Current Password"
                   placeholder="Health Center Name"
@@ -144,11 +202,12 @@ const AddNewUser = ({ handleAddNewUser }) => {
                   htmlFor="userId"
                   className="block mb-2 text-lg text-blue-700 font-medium"
                 >
-                  Address
+                  Specialist
                 </label>
                 <input
                   id="healtcenterName"
-                  name="healtcenterName"
+                  name="specialist"
+                  onChange={changeHandler}
                   type="text"
                   autoComplete="Current Password"
                   placeholder="Health Center Name"
@@ -164,7 +223,8 @@ const AddNewUser = ({ handleAddNewUser }) => {
                 </label>
                 <input
                   id="healtcenterName"
-                  name="healtcenterName"
+                  name="password"
+                  onChange={changeHandler}
                   type="text"
                   autoComplete="Current Password"
                   placeholder="Health Center Name"
@@ -176,11 +236,12 @@ const AddNewUser = ({ handleAddNewUser }) => {
                   htmlFor="userId"
                   className="block mb-2 text-lg text-blue-700 font-medium"
                 >
-                  Confirm Password
+                  Department
                 </label>
                 <input
                   id="healtcenterName"
-                  name="healtcenterName"
+                  name="department"
+                  onChange={changeHandler}
                   type="text"
                   autoComplete="Current Password"
                   placeholder="Health Center Name"
