@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import React from "react";
+import React, { useState } from "react";
 
 const createPatient = async (patient) => {
   const response = await fetch(
@@ -17,8 +17,30 @@ const createPatient = async (patient) => {
 };
 
 const AddNewPatient = ({ handleAddNewPatient }) => {
+  const [patientInfo, setPatientInfo] = useState({
+    fullName: "",
+    DateOfBirth: "",
+    Gender: "",
+    City: "",
+    subCity: "",
+    Woreda: "",
+    houseNumber: "",
+    phoneNumber: "",
+    EmergencyContact: "",
+    Email: "",
+    CreatedBy: "admin",
+  });
+
+  const changeHandler = (e) => {
+    const { name, value } = e.target;
+    setPatientInfo({
+      ...patientInfo,
+      [name]: value,
+    });
+  };
+
   const addPatientMutation = useMutation({
-    mutationFn: addUser,
+    mutationFn: createPatient,
     onSuccess: () => {
       toast.success("Patient created successfully");
       queryClient.invalidateQueries(["patient"]);
@@ -28,6 +50,16 @@ const AddNewPatient = ({ handleAddNewPatient }) => {
       toast.error("Error adding Patient");
     },
   });
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log("%%%: ", patientInfo);
+    try {
+      addPatientMutation.mutate(patientInfo);
+    } catch (error) {
+      console.log("got this error");
+    }
+  };
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-transparent backdrop-blur-sm z-50 overflow-auto">
@@ -60,7 +92,7 @@ const AddNewPatient = ({ handleAddNewPatient }) => {
               <span className="sr-only">Close modal</span>
             </button>
           </div>
-          <form className="p-4 md:p-5">
+          <form className="p-4 md:p-5" onSubmit={handleSubmit}>
             <div className="flex flex-col items-start mt-5">
               <label
                 htmlFor="userId"
@@ -87,7 +119,8 @@ const AddNewPatient = ({ handleAddNewPatient }) => {
                 </label>
                 <input
                   id="healtcenterName"
-                  name="healtcenterName"
+                  name="fullName"
+                  onChange={changeHandler}
                   type="text"
                   autoComplete="Current Password"
                   placeholder="Health Center Name"
@@ -101,9 +134,13 @@ const AddNewPatient = ({ handleAddNewPatient }) => {
                 >
                   Gender
                 </label>
-                <select className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5">
-                  <option>Male</option>
-                  <option>Female</option>
+                <select
+                  name="Gender"
+                  onChange={changeHandler}
+                  className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                >
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
                 </select>
               </div>
               <div className="flex flex-col items-start mt-5">
@@ -115,7 +152,8 @@ const AddNewPatient = ({ handleAddNewPatient }) => {
                 </label>
                 <input
                   id="healtcenterName"
-                  name="healtcenterName"
+                  name="DateOfBirth"
+                  onChange={changeHandler}
                   type="date"
                   autoComplete="Current Password"
                   placeholder="Health Center Name"
@@ -131,7 +169,8 @@ const AddNewPatient = ({ handleAddNewPatient }) => {
                 </label>
                 <input
                   id="healtcenterName"
-                  name="healtcenterName"
+                  name="phoneNumber"
+                  onChange={changeHandler}
                   type="text"
                   autoComplete="Current Password"
                   placeholder="Health Center Name"
@@ -178,7 +217,8 @@ const AddNewPatient = ({ handleAddNewPatient }) => {
                 </label>
                 <input
                   id="healtcenterName"
-                  name="healtcenterName"
+                  name="Email"
+                  onChange={changeHandler}
                   type="text"
                   autoComplete="Current Password"
                   placeholder="Health Center Name"
@@ -190,11 +230,12 @@ const AddNewPatient = ({ handleAddNewPatient }) => {
                   htmlFor="userId"
                   className="block mb-2 text-lg text-blue-700 font-medium"
                 >
-                  Address
+                  City
                 </label>
                 <input
                   id="healtcenterName"
-                  name="healtcenterName"
+                  onChange={changeHandler}
+                  name="City"
                   type="text"
                   autoComplete="Current Password"
                   placeholder="Health Center Name"
@@ -206,11 +247,46 @@ const AddNewPatient = ({ handleAddNewPatient }) => {
                   htmlFor="userId"
                   className="block mb-2 text-lg text-blue-700 font-medium"
                 >
-                  Emergency Contact
+                  SubCity
                 </label>
                 <input
                   id="healtcenterName"
-                  name="healtcenterName"
+                  onChange={changeHandler}
+                  name="subCity"
+                  type="text"
+                  autoComplete="Current Password"
+                  placeholder="Health Center Name"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                />
+              </div>
+              <div className="flex flex-col items-start mt-5">
+                <label
+                  htmlFor="userId"
+                  className="block mb-2 text-lg text-blue-700 font-medium"
+                >
+                  Woreda
+                </label>
+                <input
+                  id="healtcenterName"
+                  onChange={changeHandler}
+                  name="Woreda"
+                  type="text"
+                  autoComplete="Current Password"
+                  placeholder="Health Center Name"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                />
+              </div>
+              <div className="flex flex-col items-start mt-5">
+                <label
+                  htmlFor="userId"
+                  className="block mb-2 text-lg text-blue-700 font-medium"
+                >
+                  House Number
+                </label>
+                <input
+                  id="healtcenterName"
+                  onChange={changeHandler}
+                  name="houseNumber"
                   type="text"
                   autoComplete="Current Password"
                   placeholder="Health Center Name"
@@ -226,10 +302,11 @@ const AddNewPatient = ({ handleAddNewPatient }) => {
               >
                 Emergency Contact
               </label>
-              <textarea
+              <input
                 id="healtcenterName"
-                name="healtcenterName"
-                type="textarea"
+                name="EmergencyContact"
+                onChange={changeHandler}
+                type="text"
                 autoComplete="Current Password"
                 placeholder="Health Center Name"
                 className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"

@@ -1,9 +1,25 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Table from "../../components/Table";
 import { FaDownload, FaPlus } from "react-icons/fa";
 import AddNewUser from "./AddNewUserModal";
+import { useQuery } from "@tanstack/react-query";
+import { AuthContext } from "../../contexts/auth";
+
+const getUsers = async (token) => {
+  const response = await fetch(
+    `${import.meta.env.VITE_API_URL}/user/getUser/Ermi`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  if (!response.ok) throw new Error("Error fetching users");
+  return response.json();
+};
 
 const ManageUser = () => {
+  const { token } = useContext(AuthContext);
   const [addNewUser, setAddNewUser] = useState(false);
   const data = [
     {
@@ -38,6 +54,11 @@ const ManageUser = () => {
   const handleAddNewUser = () => {
     setAddNewUser(false);
   };
+
+  const { data: allUsersData, isLoading: userLoading } = useQuery({
+    queryKey: ["allUsers"],
+    queryFn: () => getUsers(token),
+  });
 
   return (
     <div className="mx-20">

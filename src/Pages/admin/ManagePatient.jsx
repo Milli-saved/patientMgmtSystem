@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import Table from "../../components/Table";
 import { FaDownload, FaPlus } from "react-icons/fa";
 import AddNewPatient from "./AddNewPatientModal";
@@ -20,7 +20,6 @@ const getPatients = async (token) => {
 
 const ManagePatient = () => {
   const { token } = useContext(AuthContext);
-  const queryClient = useQueryClient();
   const [addNewPatient, setAddNewPatient] = useState(false);
   const data = [
     {
@@ -55,7 +54,7 @@ const ManagePatient = () => {
     setAddNewPatient(false);
   };
 
-  const { data: patientData, isLoading: userLoading } = useQuery({
+  const { data: patientData, isLoading: patientLoading } = useQuery({
     queryKey: ["patient"],
     queryFn: () => getPatients(token),
   });
