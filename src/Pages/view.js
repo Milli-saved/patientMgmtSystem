@@ -89,7 +89,7 @@ const RoleBasedViews = {
       },
     },
   },
-  Lab: {
+  labtechnician: {
     name: "Lab",
     routes: {
       "/": {
@@ -109,7 +109,7 @@ const RoleBasedViews = {
       },
     },
   },
-  Health_Officer: {
+  healthofficer: {
     name: "Health Officer",
     routes: {
       "/": {

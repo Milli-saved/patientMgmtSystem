@@ -7,26 +7,33 @@ export const AuthContext = createContext();
 const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
 
-  const [user, setUser] = useState({
-    name: "Million",
-    role: "super_user",
-  });
-  const [token, setToken] = useState(localStorage.getItem("token"));
+  const [user, setUser] = useState(localStorage.getItem("user"));
+  const [token, setToken] = useState(null);
   const [station, setStation] = useState("");
   const [userStationId, setUserStationId] = useState("");
   const [roles, setRoles] = useState("");
-  useEffect(() => {
-    if (user) {
-      return;
-    }
 
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (!storedUser) {
+      navigate("/signin");
+    }
+  }, []);
+
+  useEffect(() => {
     try {
-      const decodedToken = jwtDecode(localStorage.getItem("token"));
-      setUser(decodedToken.data);
+      const storedUser = localStorage.getItem("user");
+      if (storedUser) {
+        const decodedToken = JSON.parse(storedUser);
+        console.log("the user: &&", decodedToken);
+        setUser(decodedToken);
+      } else {
+        navigate("/signin");
+      }
     } catch (error) {
       navigate("/signin");
     }
-  }, [token]);
+  }, []);
 
   return (
     <AuthContext.Provider

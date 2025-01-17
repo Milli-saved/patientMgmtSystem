@@ -42,28 +42,25 @@ const Signin = () => {
 
       if (response.ok) {
         const result = await response.json();
-        console.log("the result: ", result);
         // const decodedToken = await jwtDecode(result.token);
-        console.log("decoded token :", result.data);
         window.localStorage.setItem("token", result.data.token);
         const role = result.data.role;
         const roleBasedView = RoleBasedViews[role];
-        console.log("the role: ", roleBasedView);
         if (roleBasedView && roleBasedView.routes) {
           const roles_menu = Object.keys(roleBasedView?.routes)?.map((key) => {
             const { icons, label } = roleBasedView.routes[key];
             return { Icon: icons, label, to: key };
           });
-          console.log("the roles menu: ", roles_menu);
           if (roles_menu && roles_menu.length > 0) {
-            localStorage.setItem("token", result.token);
             let user = {
               fullName: result.data.fullName,
               email: result.data.email,
               phoneNumber: result.data.phoneNumber,
               role: result.data.role,
             };
+            // console.log("the user is: ", user);
             setUser(user);
+            window.localStorage.setItem("user", JSON.stringify(user));
             setToken(result.data.token);
             console.log("the route: ", roles_menu[0]);
             navigate(roles_menu[0].to);

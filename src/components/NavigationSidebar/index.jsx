@@ -1,6 +1,6 @@
-import { useContext, useMemo } from "react";
+import { useContext, useEffect, useMemo } from "react";
 import { AuthContext } from "../../contexts/auth";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { RoleBasedViews } from "../../Pages/view";
 
 // Reusable SidebarItem component
@@ -16,15 +16,23 @@ const SidebarItem = ({ isOpen, label, Icon, to, isActive }) => (
 );
 
 function NavigationSidebar() {
+  const navigate = useNavigate();
   const { user } = useContext(AuthContext);
   const location = useLocation();
 
+  useEffect(() => {
+    if (!user) {
+      navigate("/signin");
+    }
+  }, []);
+  console.log("$$$$$$: ", typeof user);
+
   const rolesMenu = useMemo(() => {
-    return Object.keys(RoleBasedViews[user.role].routes).map((key) => {
+    return Object.keys(RoleBasedViews[user?.role]?.routes).map((key) => {
       const { icons, label, bool } = RoleBasedViews[user.role].routes[key];
       return { Icon: icons, label, to: key, bool };
     });
-  }, [user.role]);
+  }, [user?.role]);
 
   return (
     <div className="flex flex-col h-screen bg-slate-100 transition-all duration-300 min-w-[200px]">
