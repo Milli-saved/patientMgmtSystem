@@ -5,6 +5,7 @@ import { RoleBasedViews } from "../../Pages/view";
 
 const ProtectedRoute = () => {
   const { user } = useContext(AuthContext);
+  console.log("the user: ", user);
   const location = useLocation();
 
   try {

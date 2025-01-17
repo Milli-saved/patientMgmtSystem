@@ -1,8 +1,14 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import { RoleBasedViews } from "../view";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../contexts/auth";
+// import {}
 
 const Signin = () => {
+  const navigate = useNavigate();
+  const { user, setUser, token, setToken } = useContext(AuthContext);
   const [credentials, setCredentials] = useState({
-    userId: "",
+    userName: "",
     password: "",
   });
   const [loading, setLoading] = useState(false);
@@ -37,18 +43,29 @@ const Signin = () => {
       if (response.ok) {
         const result = await response.json();
         console.log("the result: ", result);
-        const decodedToken = jwtDecode(result.token);
-        const role = decodedToken.data?.role?.auth_role_id;
+        // const decodedToken = await jwtDecode(result.token);
+        console.log("decoded token :", result.data);
+        window.localStorage.setItem("token", result.data.token);
+        const role = result.data.role;
         const roleBasedView = RoleBasedViews[role];
+        console.log("the role: ", roleBasedView);
         if (roleBasedView && roleBasedView.routes) {
           const roles_menu = Object.keys(roleBasedView?.routes)?.map((key) => {
-            const { icon, label } = roleBasedView.routes[key];
-            return { Icon: icon, label, to: key };
+            const { icons, label } = roleBasedView.routes[key];
+            return { Icon: icons, label, to: key };
           });
-
+          console.log("the roles menu: ", roles_menu);
           if (roles_menu && roles_menu.length > 0) {
             localStorage.setItem("token", result.token);
-            setToken(result.token);
+            let user = {
+              fullName: result.data.fullName,
+              email: result.data.email,
+              phoneNumber: result.data.phoneNumber,
+              role: result.data.role,
+            };
+            setUser(user);
+            setToken(result.data.token);
+            console.log("the route: ", roles_menu[0]);
             navigate(roles_menu[0].to);
           } else {
             setError(
@@ -89,14 +106,14 @@ const Signin = () => {
             <form onSubmit={submitHandler} className="space-y-4 md:space-y-6">
               <div className="flex flex-col items-start">
                 <label
-                  htmlFor="userId"
+                  htmlFor="userName"
                   className="block mb-2 text-lg font-medium text-blue-700"
                 >
-                  User Id
+                  User Name
                 </label>
                 <input
-                  id="userId"
-                  name="userId"
+                  id="userName"
+                  name="userName"
                   onChange={changeHandler}
                   type="text"
                   autoComplete="User Id"
@@ -106,7 +123,7 @@ const Signin = () => {
               </div>
               <div className="flex flex-col items-start">
                 <label
-                  htmlFor="userId"
+                  htmlFor="password"
                   className="block mb-2 text-lg text-blue-700 font-medium"
                 >
                   Password

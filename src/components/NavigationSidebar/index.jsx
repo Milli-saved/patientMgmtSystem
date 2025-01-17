@@ -24,7 +24,7 @@ function NavigationSidebar() {
       const { icons, label, bool } = RoleBasedViews[user.role].routes[key];
       return { Icon: icons, label, to: key, bool };
     });
-  }, [user.role.auth_role_id]);
+  }, [user.role]);
 
   return (
     <div className="flex flex-col h-screen bg-slate-100 transition-all duration-300 min-w-[200px]">

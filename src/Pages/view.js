@@ -59,7 +59,7 @@ const RoleBasedViews = {
       },
     },
   },
-  Physician: {
+  physician: {
     name: "Physician",
     routes: {
       "/": {
