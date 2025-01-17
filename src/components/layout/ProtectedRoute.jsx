@@ -9,7 +9,7 @@ const ProtectedRoute = () => {
   console.log("the user: ", user);
 
   if (!user || !user.role) {
-    return <Navigate to="/signin" />;
+    return <Navigate to="/" />;
   }
 
   try {

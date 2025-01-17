@@ -22,17 +22,24 @@ function NavigationSidebar() {
 
   useEffect(() => {
     if (!user) {
-      navigate("/signin");
+      navigate("/");
     }
   }, []);
   console.log("$$$$$$: ", typeof user);
 
+  let userDetails;
+  if (typeof user == "string") {
+    userDetails = JSON.parse(user);
+  } else {
+    userDetails = user;
+  }
   const rolesMenu = useMemo(() => {
-    return Object.keys(RoleBasedViews[user?.role]?.routes).map((key) => {
-      const { icons, label, bool } = RoleBasedViews[user.role].routes[key];
+    return Object.keys(RoleBasedViews[userDetails?.role]?.routes).map((key) => {
+      const { icons, label, bool } =
+        RoleBasedViews[userDetails.role].routes[key];
       return { Icon: icons, label, to: key, bool };
     });
-  }, [user?.role]);
+  }, [userDetails?.role]);
 
   return (
     <div className="flex flex-col h-screen bg-slate-100 transition-all duration-300 min-w-[200px]">

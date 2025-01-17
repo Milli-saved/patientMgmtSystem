@@ -22,7 +22,7 @@ const RoleBasedViews = {
   super_user: {
     name: "Super User",
     routes: {
-      "/": {
+      "/dashboard": {
         label: "Home",
         component: React.createElement(HomePage),
         icons: FaHome,
@@ -47,7 +47,7 @@ const RoleBasedViews = {
   patient: {
     name: "Patient",
     routes: {
-      "/": {
+      "/dashboard": {
         label: "Home",
         component: React.createElement(PatientHomePage),
         icons: FaHome,
@@ -62,7 +62,7 @@ const RoleBasedViews = {
   physician: {
     name: "Physician",
     routes: {
-      "/": {
+      "/dashboard": {
         label: "Appointments",
         component: React.createElement(PhysicianHome),
         icons: FaHome,
@@ -92,7 +92,7 @@ const RoleBasedViews = {
   labtechnician: {
     name: "Lab",
     routes: {
-      "/": {
+      "/dashboard": {
         label: "Lab Test & Prescriptions",
         component: React.createElement(LabHome),
         icons: FaHome,
@@ -112,7 +112,7 @@ const RoleBasedViews = {
   healthofficer: {
     name: "Health Officer",
     routes: {
-      "/": {
+      "/dashboard": {
         label: "Manage Health Center",
         component: React.createElement(HealthOfficerHome),
         icons: FaHome,

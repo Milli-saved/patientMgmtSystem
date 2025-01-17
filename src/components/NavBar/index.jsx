@@ -17,7 +17,7 @@ const index = () => {
   };
 
   const logoutHandler = () => {
-    navigate("/signin");
+    navigate("/");
     // setIsLoggedIn(false);
     localStorage.removeItem("token");
     setUser(null);

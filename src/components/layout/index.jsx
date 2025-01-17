@@ -11,7 +11,7 @@ function Layout() {
   return (
     <Routes>
       <Route
-        path="/signin"
+        path="/"
         element={
           <AuthProvider>
             <Signin />
@@ -50,7 +50,7 @@ function ResponsiveLayout() {
 function AuthenticatedRoutes() {
   return (
     <Routes>
-      <Route path="/" element={<ProtectedRoute />} />
+      <Route path="/dashboard" element={<ProtectedRoute />} />
       <Route path="/manage-patients" element={<ProtectedRoute />} />
       <Route path="/manage-health-center" element={<ProtectedRoute />} />
       <Route path="/manage-user" element={<ProtectedRoute />} />
