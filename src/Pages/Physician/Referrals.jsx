@@ -1,5 +1,6 @@
-import React from 'react'
-import Table from '../../components/Table';
+import React, { useState } from "react";
+import Table from "../../components/Table";
+import AddNewRefferal from "./AddNewRefferal";
 
 const data = [
   {
@@ -32,14 +33,30 @@ const data = [
 ];
 
 const Referrals = () => {
+  const [addNewRefferalModal, setAddNewRefferalModal] = useState(false);
+
+  const closeModal = () => {
+    setAddNewRefferalModal(false);
+  };
   return (
     <>
-      <div>
+      <div className="mx-10 flex justify-between items-center">
         <h1 className="m-5 text-5xl font-semibold text-gray-800">Referrals</h1>
+        <div>
+          <button
+            onClick={() => setAddNewRefferalModal(true)}
+            className="text-black bg-green-400 hover:bg-green-700 hover:text-white rounded-lg text-sm p-5 h-8 ms-auto inline-flex justify-center items-center"
+          >
+            Create New Refferal
+          </button>
+        </div>
       </div>
       <Table data={data} />
+      {addNewRefferalModal && (
+        <AddNewRefferal onClose={closeModal} isOpen={addNewRefferalModal} />
+      )}
     </>
   );
-}
+};
 
-export default Referrals
+export default Referrals;
