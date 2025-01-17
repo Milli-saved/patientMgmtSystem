@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Table from "../../components/Table";
+import AddNewLabTestModal from "./AddNewLabTestModal";
 
 const data = [
   {
@@ -33,12 +34,25 @@ const data = [
 
 const LabTestAndPrescription = () => {
   const [activeTab, setActiveTab] = useState("0");
+  const [createNewLabTestReq, setCreateNewLabTestReq] = useState(false);
+
+  const closeNewLabReqModal = () => {
+    setCreateNewLabTestReq(false);
+  };
   return (
     <>
-      <div>
+      <div className="mx-10 flex items-center justify-between">
         <h1 className="m-5 text-5xl font-semibold text-gray-800">
           Lab Test And Prescriptions
         </h1>
+        <div>
+          <button
+            onClick={() => setCreateNewLabTestReq(true)}
+            className="text-black bg-green-400 hover:bg-green-700 hover:text-white rounded-lg text-sm p-5 h-8 ms-auto inline-flex justify-center items-center"
+          >
+            Create New Lab Test Request
+          </button>
+        </div>
       </div>
       <div className="flex items-center">
         <h1
@@ -57,16 +71,26 @@ const LabTestAndPrescription = () => {
       <div>
         {activeTab == 0 ? (
           <div>
-            <h1 className="m-5 text-3xl underline font-semibold text-gray-800 ">List of Patients</h1>
+            <h1 className="m-5 text-3xl underline font-semibold text-gray-800 ">
+              List of Patients
+            </h1>
             <Table data={data} />
           </div>
         ) : (
           <div>
-            <h1 className="m-5 text-3xl underline font-semibold text-gray-800 ">Prescription List</h1>
+            <h1 className="m-5 text-3xl underline font-semibold text-gray-800 ">
+              Prescription List
+            </h1>
             <Table data={data} />
           </div>
         )}
       </div>
+      {createNewLabTestReq && (
+        <AddNewLabTestModal
+          isOpen={createNewLabTestReq}
+          onClose={closeNewLabReqModal}
+        />
+      )}
     </>
   );
 };
