@@ -1,6 +1,12 @@
 import React from "react";
-import { FaBookmark, FaHome, FaHospital, FaUser } from "react-icons/fa";
-import { FaGear, FaHospitalUser } from "react-icons/fa6";
+import {
+  FaArrowAltCircleDown,
+  FaBookmark,
+  FaHome,
+  FaHospital,
+  FaUser,
+} from "react-icons/fa";
+import { FaGear, FaHospitalUser, FaUserDoctor } from "react-icons/fa6";
 
 import HomePage from "./admin/HomePage";
 import ManagePatients from "./admin/ManagePatient";
@@ -17,6 +23,9 @@ import LabHome from "./Lab/LabHome";
 import LabReport from "./Lab/Report";
 import LabSettings from "./Lab/Settings";
 import HealthOfficerHome from "./HealthOfficer/HealthOfficerHome";
+import PatientRecords from "./recordofficer/PatientRecords";
+import AssignPatientToDoctor from "./recordofficer/AssignPatientToDoctor";
+import ReferralList from "./recordofficer/ReferralList";
 
 const RoleBasedViews = {
   super_user: {
@@ -116,6 +125,26 @@ const RoleBasedViews = {
         label: "Manage Health Center",
         component: React.createElement(HealthOfficerHome),
         icons: FaHome,
+      },
+    },
+  },
+  recordofficer: {
+    name: "Record Officer",
+    routes: {
+      "/dashboard": {
+        label: "Patient Records",
+        component: React.createElement(PatientRecords),
+        icons: FaHome,
+      },
+      "/assignpatienttodocs": {
+        label: "Assign Patient to Doctor",
+        component: React.createElement(AssignPatientToDoctor),
+        icons: FaUserDoctor,
+      },
+      "/referralslist": {
+        label: "Access Referral",
+        component: React.createElement(ReferralList),
+        icons: FaArrowAltCircleDown,
       },
     },
   },

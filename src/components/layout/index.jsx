@@ -58,6 +58,9 @@ function AuthenticatedRoutes() {
       <Route path="/referrals" element={<ProtectedRoute />} />
       <Route path="/labtestandprescription" element={<ProtectedRoute />} />
       <Route path="/report" element={<ProtectedRoute />} />
+      <Route path="/assignpatienttodocs" element={<ProtectedRoute />} />
+      <Route path="/referralslist" element={<ProtectedRoute />} />
+      {/* <Route path="/report" element={<ProtectedRoute />} /> */}
     </Routes>
   );
 }
