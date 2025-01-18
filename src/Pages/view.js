@@ -27,6 +27,9 @@ import PatientRecords from "./recordofficer/PatientRecords";
 import AssignPatientToDoctor from "./recordofficer/AssignPatientToDoctor";
 import ReferralList from "./recordofficer/ReferralList";
 
+import CashierDashboard from "./cashier/Dashboard";
+import CashierFeedback from "./cashier/feedback";
+
 const RoleBasedViews = {
   super_user: {
     name: "Super User",
@@ -145,6 +148,21 @@ const RoleBasedViews = {
         label: "Access Referral",
         component: React.createElement(ReferralList),
         icons: FaArrowAltCircleDown,
+      },
+    },
+  },
+  cashier: {
+    name: "Cashier",
+    routes: {
+      "/dashboard": {
+        label: "Patient Records",
+        component: React.createElement(CashierDashboard),
+        icons: FaHome,
+      },
+      "/feedback": {
+        label: "Feedback",
+        component: React.createElement(CashierFeedback),
+        icons: FaUserDoctor,
       },
     },
   },
