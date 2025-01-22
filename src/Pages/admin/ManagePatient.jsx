@@ -1,9 +1,13 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import Table from "../../components/Table";
 import { FaDownload, FaPlus } from "react-icons/fa";
 import AddNewPatient from "./AddNewPatientModal";
 import { AuthContext } from "../../contexts/auth";
+import AdminTable from "./AdminTable";
+import { apiUtility } from "../../components/repo/api";
+import { Button } from "@mui/material";
+import ExportTable from "../utils/ExportTable";
 
 const getPatients = async (token) => {
   const response = await fetch(
@@ -21,45 +25,87 @@ const getPatients = async (token) => {
 const ManagePatient = () => {
   const { token } = useContext(AuthContext);
   const [addNewPatient, setAddNewPatient] = useState(false);
-  const data = [
-    {
-      name: "Cherry Delight",
-      id: "#KP267400",
-      branch: "Sheger",
-      email: "abdutolla@gmail.com",
-      type: "Super Admin",
-      status: "Pending",
-      color: "bg-yellow-100 text-yellow-700",
-    },
-    {
-      name: "Kiwi",
-      id: "#TL681535",
-      branch: "Sheger",
-      email: "abdutolla@gmail.com",
-      type: "Admin",
-      status: "Active",
-      color: "bg-green-100 text-green-700",
-    },
-    {
-      name: "Mango Magic",
-      id: "#GB651535",
-      branch: "Sheger",
-      email: "abdutolla@gmail.com",
-      type: "Super Admin",
-      status: "Inactive",
-      color: "bg-red-100 text-red-700",
-    },
-  ];
+  const [data, setData] = useState(null);
+  const [error, setError] = useState(null);
+  const [update, setUpdate] = useState(false);
+  const [updateDate, setUpdateDate] = useState(null);
+
+  const fetchData = async () => {
+    try {
+      const response = await apiUtility.get("/patient/getAllPatient");
+      if (response.status == true)
+        setData(response.data);
+      console.log('user: ', data);
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   const handleAddNewPatient = () => {
     setAddNewPatient(false);
+    setError("");
+  };
+  const columns = [
+    { label: "Patient ID", field: "PatientID" },
+    { label: "Full Name", field: "fullName" },
+    { label: "Date Of Birth", field: "DateOfBirth" },
+    { label: "Gender", field: "Gender" },
+    { label: "City", field: "City" },
+    { label: "Sub City", field: "subCity" },
+    { label: "Woreda", field: "Woreda" },
+    { label: "House Number", field: "houseNumber" },
+    { label: "Phone Number", field: "phoneNumber" },
+    { label: "Emergency Contact", field: "EmergencyContact" },
+    { label: "Email", field: "Email" },
+  ]; 
+
+  const handleModalOpen = () => {
+    setUpdate(true);
+    setError("");
+  }
+
+  const handleModalClose = () => {
+    setUpdate(false);
+    fetchData();
+    setError("");
   };
 
-  const { data: patientData, isLoading: patientLoading } = useQuery({
-    queryKey: ["patient"],
-    queryFn: () => getPatients(token),
-  });
+  const actions = [
+    {
+      label: "Update",
+      color: "green",
+      onClick: (row) => {
+        console.log("Update clicked for:", row);
+        setUpdateDate(row);
+        setUpdate(true);
+        setError("");
+      },
+    },
+    {
+      label: "Delete",
+      color: "red",
+      onClick: async (row) => {
+        console.log("Delete clicked for:", row);
+         return;
+        try {
+          const response = await apiUtility.get("/user/deleteUser/" + row.userName);
+          console.log('response', response);
+          if (response.status == true) {
+            await fetchData();
+            setError(response.message);
+          } else {
+            setError(response.message);
+          }
+        } catch (err) {
+          setError(err.message);
+        }
+      },
+    },
+  ];
 
-  console.log("Here is the patientData: ", patientData);
 
   return (
     <div className="mx-20">
@@ -67,36 +113,21 @@ const ManagePatient = () => {
         Manage Patients
       </h1>
       <div className="flex justify-end items-center mt-16">
-        {/* <div className="flex">
-          <input
-            placeholder="Search"
-            type="text"
-            className="bg-gray-50 border border-gray-300 text-gray-900 rounded-l-xl focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-          />
-          <button className="py-2 bg-blue-900 rounded-r-xl text-white px-5">
-            Search
-          </button>
-        </div> */}
         <div>
           <button
             onClick={() => setAddNewPatient(true)}
-            className="px-5 py-3 text-white bg-blue-900 mx-5 rounded-xl"
+            className="px-5 py-3 text-white"
           >
-            <span className="flex items-center justify-evenly">
-              <FaPlus className="mr-2" />
-              New
-            </span>
+            <Button variant="contained">New</Button>
           </button>
-          <button className="px-5 py-3 text-white bg-blue-400 mx-5 rounded-xl">
-            <span className="flex items-center justify-evenly">
-              <FaDownload className="mr-2" />
-              Export
-            </span>
+          <button className="px-5 py-3 text-white">
+            <FaDownload className="mr-2" />
+            <ExportTable data={data && data} fileName="User List" />
           </button>
         </div>
       </div>
       <div className="mt-10">
-        <Table data={data} />
+        <AdminTable data={data && data} columns={columns} actions={actions} />
       </div>
       {addNewPatient && (
         <AddNewPatient handleAddNewPatient={handleAddNewPatient} />

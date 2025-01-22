@@ -1,5 +1,6 @@
 import React from "react";
 import { DataGrid } from "@mui/x-data-grid";
+import { Button } from "@mui/material";
 
 // const AdminTable = ({ data, columns, actions }) => {
 //   return (
@@ -66,7 +67,7 @@ const AdminTable = ({ data, columns, actions }) => {
             renderCell: (params) => (
               <div style={{ display: "block", gap: "0px" }}>
                 {actions.map((action, index) => (
-                  <button
+                  <Button
                     key={index}
                     onClick={() => action.onClick(params.row)}
                     style={{
@@ -80,7 +81,7 @@ const AdminTable = ({ data, columns, actions }) => {
                     }}
                   >
                     {action.label}
-                  </button>
+                  </Button>
                 ))}
               </div>
             ),
@@ -90,13 +91,14 @@ const AdminTable = ({ data, columns, actions }) => {
   ];
 
   return (
-    <div style={{ height: 400, width: "100%" }}>
+    <div style={{ height: 400, width:"auto"}}>
       <DataGrid
         rows={rowsWithIds}
         columns={enhancedColumns}
         pageSize={5}
         style={{padding:"5px"}}
         rowsPerPageOptions={[5, 10, 20]}
+        width={200}
       />
     </div>
   );
