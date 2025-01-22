@@ -36,10 +36,10 @@ const UpdateUser = ({ open, onClose, data }) => {
         const fetch = async () => {
             if (open) {
                 const response = await apiUtility.get("/healthcenter/getHealthCenter");
-                console.log('health center', response);
+                // console.log('health center', response);
                 if (response.status == true) {
                     setHealthCenters(response.data);
-                    console.log('health center', healthCenters);
+                    // console.log('health center', healthCenters);
 
                 } else {
                     setHealthCenters(null);
@@ -50,14 +50,14 @@ const UpdateUser = ({ open, onClose, data }) => {
     }, [open]);
 
     const handleChange = (key, value) => {
-        console.log('health center', value, key);
+        // console.log('health center', value, key);
 
         setFormData((prev) => ({ ...prev, [key]: value }));
     };
 
     const handleSubmit = async () => {
         const response = await apiUtility.post(`/user/updateUser/${formData.userName}`, formData);
-        console.log('update user', response);
+        // console.log('update user', response);
         if (response.status == true) {
             setError(response.message);
             onClose();

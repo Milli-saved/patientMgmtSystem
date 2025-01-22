@@ -36,9 +36,9 @@ function ResponsiveLayout() {
     <div className="flex h-screen">
       <NavigationSideBar />
       <div
-        className={`flex flex-col justify-between flex-grow overflow-y-auto`}
+        className={`flex flex-col justify-between flex-grow overflow-y-auto mt-16`}
       >
-        <NavBar />
+        {/* <NavBar /> */}
         <main className="flex-grow font-work">
           <AuthenticatedRoutes />
         </main>
