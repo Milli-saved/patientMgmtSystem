@@ -1,6 +1,8 @@
 import React from "react";
 
 const StatusLegend = ({ chartData }) => {
+  // console.log('chartData', chartData);
+  
   return (
     <div className="flex flex-wrap gap-4">
       {chartData.map(({ name, counts, fill }) => (
@@ -9,7 +11,7 @@ const StatusLegend = ({ chartData }) => {
             style={{ backgroundColor: fill }}
             className="h-4 w-4 rounded-full"
           ></div>
-          <span>{name}</span>
+          {/* <span>{name}</span> */}
         </div>
       ))}
     </div>

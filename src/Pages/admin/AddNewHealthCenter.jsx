@@ -1,6 +1,51 @@
-import React from "react";
+import React, { useState } from "react";
+import { apiUtility } from "../../components/repo/api";
 
 const AddNewHealthCenter = ({ handleAddNewHealthCenter }) => {
+  const [healthData, setHealthData] = useState({
+    name: "",
+    Type: "",
+  });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const [success, setSuccess] = useState(false);
+
+  const changeHandler = (e) => {
+    const { name, value } = e.target;
+    console.log('changeHandler', name, value);
+
+    setHealthData({
+      ...healthData,
+      [name]: value,
+    });
+  };
+
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    try {
+      setLoading(true);
+      // console.log("env:", import.meta.env.VITE_API_URL);
+      const response = await apiUtility.post("/healthcenter/createHealthCenter",
+        healthData);
+
+      console.log('response:', response);
+      if (response.status == true) {
+        setLoading(false);
+        setSuccess(response.message);
+        setError("");
+        setHealthData({ name: "", Type: "" })
+      } else {
+        setError(response.message);
+        setSuccess("");
+      }
+    } catch (error) {
+      setLoading(false);
+      setError(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-transparent backdrop-blur-sm z-50 overflow-auto">
       <div className="relative p-4 w-[60%] max-h-full">
@@ -12,7 +57,7 @@ const AddNewHealthCenter = ({ handleAddNewHealthCenter }) => {
             <button
               type="button"
               className="text-white bg-transparent hover:bg-gray-700 hover:text-white rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center"
-              onClick={handleAddNewHealthCenter}
+              onClick={() => (handleAddNewHealthCenter(false))}
             >
               <svg
                 className="w-3 h-3"
@@ -32,7 +77,7 @@ const AddNewHealthCenter = ({ handleAddNewHealthCenter }) => {
               <span className="sr-only">Close modal</span>
             </button>
           </div>
-          <form className="p-4 md:p-5">
+          <form className="p-4 md:p-5" onSubmit={submitHandler}>
             <div className="flex flex-col items-start">
               <label
                 htmlFor="userId"
@@ -40,10 +85,15 @@ const AddNewHealthCenter = ({ handleAddNewHealthCenter }) => {
               >
                 Type
               </label>
-              <select className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5">
-                <option>Health care one</option>
-                <option>Health care Two</option>
-                <option>Health care Three</option>
+              <select
+                name="Type"
+                id="Type"
+                value={healthData.Type}
+                onChange={changeHandler}
+                className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5">
+                <option value="0"> Select Type </option>
+                <option value="Main Health Center"> Main Health Center </option>
+                <option value="Branch Health Center"> Branch Health Center </option>
               </select>
             </div>
             <div className="flex flex-col items-start mt-5">
@@ -54,19 +104,26 @@ const AddNewHealthCenter = ({ handleAddNewHealthCenter }) => {
                 Health Center Name
               </label>
               <input
-                id="healtcenterName"
-                name="healtcenterName"
+                name="name"
+                id="name"
+                value={healthData.name}
+                onChange={changeHandler}
                 type="text"
-                autoComplete="Current Password"
                 placeholder="Health Center Name"
                 className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
               />
+            </div>
+            <div className="text-red-500">
+              {error && error}
+            </div>
+            <div className="text-green-500">
+              {success && success}
             </div>
             <div className="flex justify-evenly mt-10">
               <button className="py-2 px-5 bg-blue-900 text-white rounded-xl ">
                 Create
               </button>
-              <button onClick={handleAddNewHealthCenter} className="py-2 px-5 text-gray-900 bg-slate-400 rounded-xl ">
+              <button onClick={() => (handleAddNewHealthCenter(false))} className="py-2 px-5 text-gray-900 bg-slate-400 rounded-xl ">
                 Cancel
               </button>
             </div>

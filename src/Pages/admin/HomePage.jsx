@@ -1,10 +1,29 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import SquareCard from "../../components/SquareCard";
 import { FaHospital, FaUserCheck, FaUsers } from "react-icons/fa";
 import AdminPieChart from "./AdminPieChart";
 import BarChartDiagram from "./BarChartDiagram";
+import { apiUtility } from "../../components/repo/api";
 
 const HomePage = () => {
+  const [data, setData] = useState(null);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await apiUtility.get("/util/getDashboardInfo");
+        // console.log('response', response);
+        setData(response.data);
+        console.log('data', data);
+
+      } catch (err) {
+        setError(err.message);
+      }
+    };
+
+    fetchData();
+  }, []);
   return (
     <>
       <div className="flex justify-center my-10">
@@ -39,21 +58,21 @@ const HomePage = () => {
           <SquareCard
             icon={FaUsers}
             label={"Total User"}
-            value={2420}
+            value={data && data.total_user}
             percentage={40}
             isPositive={true}
           />
           <SquareCard
             icon={FaHospital}
             label={"Total Health Care Center"}
-            value={200}
+            value={data && data.total_health_center}
             percentage={40}
             isPositive={true}
           />
           <SquareCard
             icon={FaUserCheck}
             label={"Total Patient"}
-            value={23000}
+            value={data && data.total_patient}
             percentage={40}
             isPositive={true}
           />
@@ -62,20 +81,20 @@ const HomePage = () => {
           <SquareCard
             icon={FaUserCheck}
             label={"Active Patient"}
-            value={20000}
+            value={data && data.active_patient}
             percentage={40}
             isPositive={true}
           />
           <SquareCard
             icon={FaUserCheck}
             label={"Inactive Patient"}
-            value={3000}
+            value={data && data.in_active_patient}
             percentage={40}
             isPositive={true}
           />
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 mt-10 p-4 bg-white shadow-md shadow-gray-200 rounded-lg">
-          <AdminPieChart />
+          <AdminPieChart data={data && data} />
           <BarChartDiagram />
         </div>
       </section>

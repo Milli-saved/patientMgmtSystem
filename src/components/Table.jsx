@@ -32,7 +32,7 @@ const Table = ({ data, onEditClicked }) => {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
-            {data.map((item, index) => (
+            {data && data.map((item, index) => (
               <tr key={index}>
                 <td className="px-4 py-2 text-gray-700 font-medium">
                   {item.name}

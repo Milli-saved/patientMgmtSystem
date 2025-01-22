@@ -50,7 +50,7 @@ const AddNewUser = ({ handleAddNewUser }) => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    console.log("the user dtails: ", userDetails);
+    // console.log("the user dtails: ", userDetails);
     addUserMutation.mutate(userDetails);
   };
 

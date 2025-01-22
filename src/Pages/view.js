@@ -31,7 +31,7 @@ import CashierDashboard from "./cashier/Dashboard";
 import CashierFeedback from "./cashier/feedback";
 
 const RoleBasedViews = {
-  super_user: {
+  admin: {
     name: "Super User",
     routes: {
       "/dashboard": {
