@@ -230,15 +230,8 @@ function NavigationSidebar() {
         }}
       >
         <Toolbar />
-        <Box sx={{ overflow: "auto", mt: 2, p: 2 }}>
-          <Typography
-            variant="h6"
-            align="center"
-            sx={{ fontWeight: "bold", color: "#1565c0", mb: 3 }}
-          >
-            PIMS
-          </Typography>
-          <List>
+        <Box sx={{ overflow: "auto", mt: 2, p: 2 }}>      
+          <List sx={{p:0}}>
             {rolesMenu.map((eachSideBarItem, index) => {
               return (
                 (eachSideBarItem.bool === undefined ||
@@ -257,10 +250,11 @@ function NavigationSidebar() {
         </Box>
       </Drawer>
       {dropdownOpen && (
-        <div className="absolute right-1 min-h-10 mt-32 w-48 bg-white border border-gray-200 rounded shadow-lg">
+        <div className="absolute right-1 min-h-10 mt-20 w-48
+         bg-white border border-gray-200 rounded shadow-lg">
           <button
             onClick={logoutHandler}
-            className="block px-4 py-2 text-sm hover:bg-gray-100 w-full text-start"
+            className="block text-sm pl-7 pt-2 hover:bg-gray-100 w-full text-start"
           >
             Sign Out
           </button>
