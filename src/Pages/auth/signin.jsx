@@ -45,7 +45,10 @@ const Signin = () => {
         // const decodedToken = await jwtDecode(result.token);
         window.localStorage.setItem("token", result.data.token);
         const role = result.data.role;
+        console.log('role:', role);
+        
         const roleBasedView = RoleBasedViews[role];
+        console.log("the roleBasedView is: ", roleBasedView);
         if (roleBasedView && roleBasedView.routes) {
           const roles_menu = Object.keys(roleBasedView?.routes)?.map((key) => {
             const { icons, label } = roleBasedView.routes[key];
@@ -70,7 +73,7 @@ const Signin = () => {
             );
           }
         } else {
-          setError("Invalid role or role-based view configuration");
+          setError("Unable to find roles Unknown role. Please contact your administrator");
         }
       } else {
         throw new Error("Invalid response from server");
@@ -78,7 +81,7 @@ const Signin = () => {
     } catch (error) {
       setLoading(false);
       setError(
-        "Either phone number or password is incorrect. Please try again."
+        "Either username or password is incorrect. Please try again."
       );
     } finally {
       setLoading(false);
@@ -142,6 +145,11 @@ const Signin = () => {
                 </div>
                 <p className="text-yellow-900">Forgot my password?</p>
               </div>
+              {error && (
+                <div className="text-red-600 text-sm text-center my-3">
+                  {error}
+                </div>
+              )}
               <button
                 type="submit"
                 disabled={loading}

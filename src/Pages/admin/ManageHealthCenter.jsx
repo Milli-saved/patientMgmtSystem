@@ -1,41 +1,65 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaDownload, FaPlus } from "react-icons/fa";
 import Table from "../../components/Table";
 import AddNewHealthCenter from "./AddNewHealthCenter";
+import { apiUtility } from "../../components/repo/api";
+import AdminTable from "./AdminTable";
 
 const ManageHealthCenter = () => {
   const [addNewCenter, setAddNewCenter] = useState(false);
-  const data = [
+  const [data, setData] = useState(null);
+  const [error, setError] = useState(null);
+  const fetchData = async () => {
+    try {
+      const response = await apiUtility.get("/healthcenter/getHealthCenter");
+      setData(response.data);
+      console.log('data', data);
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const columns = [
+    { label: "Name", field: "name" },
+    { label: "Health Care ID", field: "healthCenterId" },
+    { label: "Type", field: "Type" },
+  ];
+
+  const actions = [
+    // {
+    //   label: "Update",
+    //   onClick: (row) => {
+    //     console.log("Update clicked for:", row);
+    //   },
+    // },
     {
-      name: "Cherry Delight",
-      id: "#KP267400",
-      branch: "Sheger",
-      email: "abdutolla@gmail.com",
-      type: "Super Admin",
-      status: "Pending",
-      color: "bg-yellow-100 text-yellow-700",
-    },
-    {
-      name: "Kiwi",
-      id: "#TL681535",
-      branch: "Sheger",
-      email: "abdutolla@gmail.com",
-      type: "Admin",
-      status: "Active",
-      color: "bg-green-100 text-green-700",
-    },
-    {
-      name: "Mango Magic",
-      id: "#GB651535",
-      branch: "Sheger",
-      email: "abdutolla@gmail.com",
-      type: "Super Admin",
-      status: "Inactive",
-      color: "bg-red-100 text-red-700",
+      label: "Delete",
+      color: "red",
+      onClick: async (row) => {
+        console.log("Delete clicked for:", row.healthCenterId);
+        try {
+          const response = await apiUtility.get("/healthcenter/deleteHealthCenter/" + row.healthCenterId);
+          console.log('response', response);          
+          if (response.status == true) {
+            await fetchData();
+            setError(response.message);
+          } else {
+            setError(response.message);
+          }
+        } catch (err) {
+          setError(err.message);
+        }
+      },
     },
   ];
-  const handleAddNewHealthCenter = () => {
-    setAddNewCenter(false);
+
+  const handleAddNewHealthCenter = (params) => {
+    setAddNewCenter(params);
+    fetchData();
+    setError("");
   };
   return (
     <>
@@ -45,14 +69,14 @@ const ManageHealthCenter = () => {
         </h1>
         <div className="flex justify-between items-center mt-16">
           <div className="flex">
-            <input
+            {/* <input
               placeholder="Search"
               type="text"
               className="bg-gray-50 border border-gray-300 text-gray-900 rounded-l-xl focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
             />
-            <button className="py-2 bg-blue-900 rounded-r-xl text-white px-5">
+            <button className="py-2 bg-blue-900 rounded-r-xl text-white px-5" >
               Search
-            </button>
+            </button> */}
           </div>
           <div>
             <button
@@ -64,16 +88,20 @@ const ManageHealthCenter = () => {
                 New
               </span>
             </button>
-            <button className="px-5 py-3 text-white bg-blue-400 mx-5 rounded-xl">
+            {/* <button className="px-5 py-3 text-white bg-blue-400 mx-5 rounded-xl">
               <span className="flex items-center justify-evenly">
                 <FaDownload className="mr-2" />
                 Export
               </span>
-            </button>
+            </button> */}
           </div>
         </div>
+        <div>
+          {error && error}
+        </div>
         <div className="mt-10">
-          <Table data={data} />
+          {/* <Table data={data && data} /> */}
+          <AdminTable data={data && data} columns={columns} actions={actions} />
         </div>
       </div>
       {addNewCenter && (

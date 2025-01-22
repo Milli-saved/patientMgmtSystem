@@ -1,8 +1,9 @@
 const statusColor = {
-  Patients: "#1f66ba",
-  Doctors: "#FFD700",
-  Admins: "#FF4500",
-  "Other Staff": "#6A0DAD",
+  "Total Patients": "#1f66ba",
+  "Total Health Center": "#FFD700",
+  "Total User": "#FF4500",
+  "Active Patient": "#6A0DAD",
+  "In Active Patient": "#2596be",
 };
 
 const processStatus = (data) => {
