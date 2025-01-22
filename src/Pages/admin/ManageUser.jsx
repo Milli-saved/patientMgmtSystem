@@ -1,19 +1,22 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Table from "../../components/Table";
 import { FaDownload, FaPlus } from "react-icons/fa";
 import AddNewUser from "./AddNewUserModal";
 import { useQuery } from "@tanstack/react-query";
 import { AuthContext } from "../../contexts/auth";
+import { apiUtility } from "../../components/repo/api";
+import AdminTable from "./AdminTable";
+import UpdateUser from "./UpdateUser";
 
 const getUsers = async (token) => {
-  const response = await fetch(
-    `${import.meta.env.VITE_API_URL}/user/getUser/Ermi`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
+  // const response = await fetch(
+  //   `${import.meta.env.VITE_API_URL}/user/getUser/Ermi`,
+  //   // {
+  //   //   headers: {
+  //   //     Authorization: `Bearer ${token}`,
+  //   //   },
+  //   // }
+  // );
   if (!response.ok) throw new Error("Error fetching users");
   return response.json();
 };
@@ -21,44 +24,71 @@ const getUsers = async (token) => {
 const ManageUser = () => {
   const { token } = useContext(AuthContext);
   const [addNewUser, setAddNewUser] = useState(false);
-  const data = [
-    {
-      name: "Cherry Delight",
-      id: "#KP267400",
-      branch: "Sheger",
-      email: "abdutolla@gmail.com",
-      type: "Super Admin",
-      status: "Pending",
-      color: "bg-yellow-100 text-yellow-700",
-    },
-    {
-      name: "Kiwi",
-      id: "#TL681535",
-      branch: "Sheger",
-      email: "abdutolla@gmail.com",
-      type: "Admin",
-      status: "Active",
-      color: "bg-green-100 text-green-700",
-    },
-    {
-      name: "Mango Magic",
-      id: "#GB651535",
-      branch: "Sheger",
-      email: "abdutolla@gmail.com",
-      type: "Super Admin",
-      status: "Inactive",
-      color: "bg-red-100 text-red-700",
-    },
-  ];
+  const [data, setData] = useState(null);
+  const [error, setError] = useState(null);
+  const [update, setUpdate] = useState(false);
+  const [updateDate, setUpdateDate] = useState(null);
+
+  const fetchData = async () => {
+    try {
+      const response = await apiUtility.get("/user/getAllUser");
+      if (response.status == true)
+        setData(response.data);
+      console.log('user: ', data);
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const handleAddNewUser = () => {
     setAddNewUser(false);
   };
+  const columns = [
+    { label: "userName", field: "userName" },
+    { label: "Full Name", field: "fullName" },
+    { label: "Email", field: "email" },
+    { label: "Phone Number", field: "phoneNumber" },
+    { label: "Department", field: "department" },
+    { label: "Role", field: "role" },
+  ];
 
-  const { data: allUsersData, isLoading: userLoading } = useQuery({
-    queryKey: ["allUsers"],
-    queryFn: () => getUsers(token),
-  });
+  const handleModalOpen = () => setUpdate(true);
+  const handleModalClose = () => { setUpdate(false); fetchData(); };
+
+  const actions = [
+    {
+      label: "Update",
+      color: "green",
+      onClick: (row) => {
+        console.log("Update clicked for:", row);
+        setUpdateDate(row);
+        setUpdate(true);
+      },
+    },
+    {
+      label: "Delete",
+      color: "red",
+      onClick: async (row) => {
+        console.log("Delete clicked for:", row);
+        return;
+        try {
+          const response = await apiUtility.get("/user/deleteUser/" + row.userName);
+          console.log('response', response);
+          if (response.status == true) {
+            await fetchData();
+            setError(response.message);
+          } else {
+            setError(response.message);
+          }
+        } catch (err) {
+          setError(err.message);
+        }
+      },
+    },
+  ];
 
   return (
     <div className="mx-20">
@@ -93,9 +123,11 @@ const ManageUser = () => {
         </div>
       </div>
       <div className="mt-10">
-        <Table data={data} />
+        {/* <Table data={data} /> */}
+        <AdminTable data={data && data} columns={columns} actions={actions} />
       </div>
       {addNewUser && <AddNewUser handleAddNewUser={handleAddNewUser} />}
+      {update && <UpdateUser open={update} onClose={handleModalClose} data={updateDate} />}
     </div>
   );
 };
