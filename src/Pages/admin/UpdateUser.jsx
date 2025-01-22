@@ -23,13 +23,14 @@ const roles = [
     'physician',
     'healthofficer',
     'recordofficer',
-  ];
+];
 
 const UpdateUser = ({ open, onClose, data }) => {
     // console.log('reach here...', data);
 
     const [formData, setFormData] = useState(data);
     const [healthCenters, setHealthCenters] = useState([]);
+    const [error, setError] = useState('');
 
     useEffect(() => {
         const fetch = async () => {
@@ -43,12 +44,6 @@ const UpdateUser = ({ open, onClose, data }) => {
                 } else {
                     setHealthCenters(null);
                 }
-                //   axios
-                //     .get('/api/healthcenters') // Replace with your API endpoint
-                //     .then((response) => {
-                //       setHealthCenters(response.data); // Assuming API returns a list of health centers
-                //     })
-                //     .catch((error) => console.error('Error fetching health centers:', error));
             }
         }
         fetch();
@@ -64,16 +59,11 @@ const UpdateUser = ({ open, onClose, data }) => {
         const response = await apiUtility.post(`/user/updateUser/${formData.userName}`, formData);
         console.log('update user', response);
         if (response.status == true) {
-            alert('Data updated successfully!');
+            setError(response.message);
             onClose();
+        } else {
+            setError(response.message);
         }
-        //     axios
-        //         .put(`/api/users/${formData.userName}`, formData)
-        //   .then(() => {
-        //     alert('Data updated successfully!');
-        //     onClose();
-        //   })
-        //   .catch((error) => console.error('Error updating data:', error));
     };
 
     return (
@@ -85,6 +75,8 @@ const UpdateUser = ({ open, onClose, data }) => {
                     left: '50%',
                     transform: 'translate(-50%, -50%)',
                     width: 500,
+                    maxHeight: '95vh',
+                    overflowY: 'auto',
                     bgcolor: 'background.paper',
                     p: 4,
                     borderRadius: 2,
@@ -182,6 +174,7 @@ const UpdateUser = ({ open, onClose, data }) => {
                         />
                     )}
                 />
+                {error && error}
                 <Box display="flex" justifyContent="flex-end" mt={3}>
                     <Button onClick={onClose} sx={{ mr: 2 }}>
                         Cancel

@@ -7,6 +7,8 @@ import { AuthContext } from "../../contexts/auth";
 import { apiUtility } from "../../components/repo/api";
 import AdminTable from "./AdminTable";
 import UpdateUser from "./UpdateUser";
+import ExportTable from "../utils/ExportTable";
+import { Button } from "@mui/material";
 
 const getUsers = async (token) => {
   // const response = await fetch(
@@ -45,6 +47,7 @@ const ManageUser = () => {
 
   const handleAddNewUser = () => {
     setAddNewUser(false);
+    setError("");
   };
   const columns = [
     { label: "userName", field: "userName" },
@@ -55,8 +58,16 @@ const ManageUser = () => {
     { label: "Role", field: "role" },
   ];
 
-  const handleModalOpen = () => setUpdate(true);
-  const handleModalClose = () => { setUpdate(false); fetchData(); };
+  const handleModalOpen = () => {
+    setUpdate(true);
+    setError("");
+  }
+
+  const handleModalClose = () => {
+    setUpdate(false);
+    fetchData();
+    setError("");
+  };
 
   const actions = [
     {
@@ -66,6 +77,7 @@ const ManageUser = () => {
         console.log("Update clicked for:", row);
         setUpdateDate(row);
         setUpdate(true);
+        setError("");
       },
     },
     {
@@ -73,7 +85,7 @@ const ManageUser = () => {
       color: "red",
       onClick: async (row) => {
         console.log("Delete clicked for:", row);
-        return;
+        // return;
         try {
           const response = await apiUtility.get("/user/deleteUser/" + row.userName);
           console.log('response', response);
@@ -92,41 +104,26 @@ const ManageUser = () => {
 
   return (
     <div className="mx-20">
-      <h1 className="m-5 text-5xl font-semibold text-gray-800">Manage User</h1>
+      <h1 className="m-3 text-5xl font-semibold text-gray-800">Manage User</h1>
       <div className="flex justify-end items-center mt-16">
-        {/* <div className="flex">
-          <input
-            placeholder="Search"
-            type="text"
-            className="bg-gray-50 border border-gray-300 text-gray-900 rounded-l-xl focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-          />
-          <button className="py-2 bg-blue-900 rounded-r-xl text-white px-5">
-            Search
-          </button>
-        </div> */}
         <div>
           <button
             onClick={() => setAddNewUser(true)}
-            className="px-5 py-3 text-white bg-blue-900 mx-5 rounded-xl"
+            className="px-5 py-3 text-white"
           >
-            <span className="flex items-center justify-evenly">
-              <FaPlus className="mr-2" />
-              New
-            </span>
+            <Button variant="contained">New</Button>
           </button>
-          <button className="px-5 py-3 text-white bg-blue-400 mx-5 rounded-xl">
-            <span className="flex items-center justify-evenly">
-              <FaDownload className="mr-2" />
-              Export
-            </span>
+          <button className="px-5 py-3 text-white">
+            <FaDownload className="mr-2" />
+            <ExportTable data={data && data} fileName="User List" />
           </button>
         </div>
       </div>
+      {error && error}
       <div className="mt-10">
-        {/* <Table data={data} /> */}
         <AdminTable data={data && data} columns={columns} actions={actions} />
       </div>
-      {addNewUser && <AddNewUser handleAddNewUser={handleAddNewUser} />}
+      {addNewUser && <AddNewUser open={addNewUser} onClose={handleAddNewUser} />}
       {update && <UpdateUser open={update} onClose={handleModalClose} data={updateDate} />}
     </div>
   );
