@@ -91,13 +91,14 @@ const AdminTable = ({ data, columns, actions }) => {
   ];
 
   return (
-    <div style={{ height: 400, width: "100%" }}>
+    <div style={{ height: 400, width:"auto"}}>
       <DataGrid
         rows={rowsWithIds}
         columns={enhancedColumns}
         pageSize={5}
         style={{padding:"5px"}}
         rowsPerPageOptions={[5, 10, 20]}
+        width={200}
       />
     </div>
   );
