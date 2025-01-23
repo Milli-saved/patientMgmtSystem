@@ -210,6 +210,11 @@ const Signin = () => {
     e.preventDefault();
     try {
       setLoading(true);
+      
+      if (!credentials.userName || !credentials.password) {
+        setError("Please enter username and password");
+        return;
+      }
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/user/login`,
         {
@@ -306,8 +311,8 @@ const Signin = () => {
             alignItems="center"
             sx={{ mb: 3 }}
           >
-            <FormControlLabel
-              control={<Checkbox />}
+            <FormControlLabel  checked="true"
+              control={<Checkbox checked="true" />}
               label="Keep me signed in"
             />
             <Typography

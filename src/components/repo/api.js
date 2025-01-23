@@ -4,7 +4,7 @@ export const apiUtility = {
 
     async get(url) {
         try {
-            console.log('get api url', `${baseUrl}`+ url);
+            // console.log('get api url', `${baseUrl}`+ url);
             
             const response = await fetch(`${baseUrl}`+ url, {
                 method: 'GET',
@@ -25,7 +25,7 @@ export const apiUtility = {
     async post(url, body) {
         try {
 
-            console.log('post api url', `${baseUrl}`+ url);
+            // console.log('post api url', `${baseUrl}`+ url);
             
             const response = await fetch(`${baseUrl}`+ url, {
                 method: 'POST',

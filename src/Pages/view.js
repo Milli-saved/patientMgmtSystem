@@ -146,14 +146,14 @@ const RoleBasedViews = {
         component: React.createElement(AssignPatientToDoctor),
         icons: FaUserDoctor,
       },
-      "/referralslist": {
-        label: "Access Referral",
-        component: React.createElement(ReferralList),
-        icons: FaArrowAltCircleDown,
-      },
+      // "/referralslist": {
+      //   label: "Access Referral",
+      //   component: React.createElement(ReferralList),
+      //   icons: FaArrowAltCircleDown,
+      // },
     },
   },
-  
+
   cashier: {
     name: "Cashier",
     routes: {
