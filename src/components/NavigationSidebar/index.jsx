@@ -251,10 +251,10 @@ function NavigationSidebar() {
       </Drawer>
       {dropdownOpen && (
         <div className="absolute right-1 min-h-10 mt-20 w-48
-         bg-white border border-gray-200 rounded shadow-lg">
+         bg-white border border-gray-200 rounded shadow-lg z-50">
           <button
             onClick={logoutHandler}
-            className="block text-sm pl-7 pt-2 hover:bg-gray-100 w-full text-start"
+            className="block text-sm pl-7 pt-2 hover:bg-gray-100 w-full text-start z-50"
           >
             Sign Out
           </button>

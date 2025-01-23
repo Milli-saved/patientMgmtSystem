@@ -228,6 +228,8 @@ const Signin = () => {
 
       if (response.ok) {
         const result = await response.json();
+        // console.log('JSON response',result);
+        
         window.localStorage.setItem("token", result.data.token);
 
         const roleBasedView = RoleBasedViews[result.data.role];
@@ -261,7 +263,9 @@ const Signin = () => {
         setError("Invalid username or password.");
       }
     } catch (error) {
-      setError("Unable to connect to server.");
+      console.log('error', error);
+      
+      setError("Unable to connect to server.",error);
     } finally {
       setLoading(false);
     }
@@ -311,13 +315,14 @@ const Signin = () => {
             alignItems="center"
             sx={{ mb: 3 }}
           >
-            <FormControlLabel  checked="true"
-              control={<Checkbox checked="true" />}
+            <FormControlLabel 
+              control={<Checkbox />}
               label="Keep me signed in"
             />
             <Typography
               variant="body2"
               sx={{ color: "warning.main", cursor: "pointer" }}
+              onClick={(e)=>navigate('/resetPassword')}
             >
               Forgot password?
             </Typography>

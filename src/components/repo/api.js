@@ -14,6 +14,7 @@ export const apiUtility = {
             });
             if (!response.ok) {
                 throw new Error(`GET request failed with status: ${response.status}`);
+                // return "Unable to get data";
             }
             return await response.json();
         } catch (error) {
