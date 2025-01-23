@@ -48,6 +48,7 @@ const ManageUser = () => {
   const handleAddNewUser = () => {
     setAddNewUser(false);
     setError("");
+    fetchData();
   };
   const columns = [
     { label: "userName", field: "userName" },

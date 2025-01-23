@@ -62,6 +62,7 @@ function AuthenticatedRoutes() {
       <Route path="/referralslist" element={<ProtectedRoute />} />
       <Route path="/feedback" element={<ProtectedRoute />} />
       <Route path="/resetPassword" element={<ResetPassword/>} />
+      <Route path="/reset" element={<ProtectedRoute/>} />
     </Routes>
   );
 }
