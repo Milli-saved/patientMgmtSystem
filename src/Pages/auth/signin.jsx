@@ -245,7 +245,8 @@ const Signin = () => {
               email: result.data.email,
               phoneNumber: result.data.phoneNumber,
               role: result.data.role,
-              healthCenterId: result.data.healthCenterId
+              healthCenterId: result.data.healthCenterId,
+              userName: result.data.userName
             };
             setUser(user);
             window.localStorage.setItem("user", JSON.stringify(user));

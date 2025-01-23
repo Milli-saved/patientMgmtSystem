@@ -54,7 +54,12 @@ const RoleBasedViews = {
         label: "Reset Password",
         component: React.createElement(PasswordResetPage),
         icons: FaUser,
-      }
+      },
+      "/settings": {
+        label: "Settings",
+        component: React.createElement(PhysicianSettings),
+        icons: FaGear,
+      },
     },
   },
   patient: {
@@ -90,11 +95,11 @@ const RoleBasedViews = {
         component: React.createElement(LabTestAndPrescription),
         icons: FaHome,
       },
-      "/report": {
-        label: "Reports",
-        // component:
-        icons: FaBookmark,
-      },
+      // "/report": {
+      //   label: "Reports",
+      //   // component:
+      //   icons: FaBookmark,
+      // },
       "/settings": {
         label: "Settings",
         component: React.createElement(PhysicianSettings),
@@ -119,6 +124,10 @@ const RoleBasedViews = {
         label: "Settings",
         component: React.createElement(LabSettings),
         icons: FaGear,
+      }, "/settings": {
+        label: "Settings",
+        component: React.createElement(PhysicianSettings),
+        icons: FaGear,
       },
     },
   },
@@ -135,6 +144,10 @@ const RoleBasedViews = {
         label: "Manage Patients",
         component: React.createElement(ManagePatients),
         icons: FaHospitalUser,
+      }, "/settings": {
+        label: "Settings",
+        component: React.createElement(PhysicianSettings),
+        icons: FaGear,
       },
     },
   },
@@ -157,6 +170,11 @@ const RoleBasedViews = {
       //   component: React.createElement(ReferralList),
       //   icons: FaArrowAltCircleDown,
       // },
+      "/settings": {
+        label: "Settings",
+        component: React.createElement(PhysicianSettings),
+        icons: FaGear,
+      },
     },
   },
 
@@ -172,6 +190,10 @@ const RoleBasedViews = {
         label: "Feedback",
         component: React.createElement(CashierFeedback),
         icons: FaUserDoctor,
+      }, "/settings": {
+        label: "Settings",
+        component: React.createElement(PhysicianSettings),
+        icons: FaGear,
       },
     },
   },

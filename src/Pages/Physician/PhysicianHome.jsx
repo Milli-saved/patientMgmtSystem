@@ -138,19 +138,33 @@ import {
 } from "@mui/material";
 import { apiUtility } from "../../components/repo/api";
 import { AuthContext } from "../../contexts/auth";
+import AdminTable from "../admin/AdminTable";
+import { FaDownload } from "react-icons/fa";
+import ExportTable from "../utils/ExportTable";
 
 const PhysicianHome = () => {
   // fetch patient info. 
   const [patient, setData] = useState(null);
+  const [medical, setMedialData] = useState(null);
   const [selectedPatient, setSelectedPatient] = useState("");
   const [error, setError] = useState("");
-  const { token, user } = useContext(AuthContext);
+  // const { token, user } = useContext(AuthContext);
+  // const userName = user.userName;
+  const { user } = useContext(AuthContext);
+
   const fetchData = async () => {
     try {
+      console.log('userName', user);
       const response = await apiUtility.get(`/patient/getAllAssignPatient/${user.userName}`);
       if (response.status == true)
         setData(response.data);
       console.log('user: ', patient);
+
+      const result = await apiUtility.get(`/doctor/getMedicalRecordByDoctor/${user.userName}`);
+      if (result.status == true)
+        setMedialData(result.data);
+      console.log('setMedialData: ', patient);
+
     } catch (err) {
       setError("Unable to get assigned patient");
     }
@@ -160,7 +174,8 @@ const PhysicianHome = () => {
   }, []);
 
   const [patientData, setPatientData] = useState({
-    "PatientId": selectedPatient ? selectedPatient : "",
+    "PatientId": selectedPatient,
+    "PhysicianId": user.userName,
     "Description": "",
     "Treatment": "",
     "Note": "",
@@ -172,21 +187,22 @@ const PhysicianHome = () => {
   }
 
   const handleSubmit = async (e) => {
-    console.log('patientData: ', patientData);
     e.preventDefault();
+    console.log('patientData: ', patientData);
     try {
       const response = await apiUtility.post("/doctor/createMedicalRecord", patientData);
       if (response) {
         setError(response.message);
         if (response.status == true) {
-          setSelectedPatient();
           setPatientData({
-            "PatientId": "",
+            "PatientId": selectedPatient,
+            "PhysicianId": user.userName,
             "Description": "",
             "Treatment": "",
             "Note": "",
             "Allergies": ""
           });
+          setSelectedPatient();
           fetchData();
         }
       } else {
@@ -196,12 +212,61 @@ const PhysicianHome = () => {
       setError("Unable to create patient medical history");
     }
   }
+
+  const columns = [
+    { label: "Patient ID", field: "patientId" },
+    { label: "Record ID", field: "recordId" },
+    { label: "Full Name", field: "patientName" },
+    { label: "Date Of Birth", field: "DateOfBirth" },
+    { label: "Gender", field: "Gender" },
+    { label: "City", field: "City" },
+    { label: "Phone Number", field: "phoneNumber" },
+    { label: "Description", field: "Description" },
+    { label: "Treatment", field: "Treatment" },
+    { label: "Note", field: "Note" },
+    { label: "Allergies", field: "Allergies" },
+  ];
+
+  const actions = [
+    // {
+    //   label: "Update",
+    //   color: "green",
+    //   onClick: (row) => {
+    //     console.log("Update clicked for:", row);
+    //     setUpdateDate(row);
+    //     setUpdate(true);
+    //     setError("");
+    //   },
+    // },
+    {
+      label: "Delete",
+      color: "red",
+      onClick: async (row) => {
+        console.log("Delete clicked for:", row);
+        return;
+        try {
+          const response = await apiUtility.get("/user/deleteUser/" + row.userName);
+          console.log('response', response);
+          if (response.status == true) {
+            await fetchData();
+            setError(response.message);
+          } else {
+            setError(response.message);
+          }
+        } catch (err) {
+          setError(err.message);
+        }
+      },
+    },
+  ];
+
+
   return (
     <Box>
       {/* Patient Selection */}
       <Box display="flex" justifyContent="end" mx={5} my={3}>
         <Box maxWidth="400">
-          <FormControl fullWidth>
+          <FormControl  sx={{width:300}}>
             <InputLabel id="select-patient-label">Select Patient</InputLabel>
             <Select labelId="select-patient-label" onChange={(e) => setSelectedPatient(e.target.value)}
               label="Select Patient">
@@ -286,6 +351,18 @@ const PhysicianHome = () => {
             Create
           </Button>
         </Paper>
+        <Box>
+          <Box display="flex" justifyContent="start" my={3}>
+            <Typography variant="h6">Medical Records</Typography>
+          </Box>
+          {/* <Box sx={{ height: 400, overflow: 'auto' }}> */}
+          <button className="px-5 py-3 text-white">
+            <FaDownload className="mr-2" />
+            <ExportTable data={medical && medical} fileName="Medical Record List" />
+          </button>
+          {/* </Box> */}
+          <AdminTable columns={columns}  data={medical} />
+        </Box>
       </Box>
     </Box>
   );
