@@ -25,7 +25,7 @@ const AuthProvider = ({ children }) => {
       const storedUser = localStorage.getItem("user");
       if (storedUser) {
         const decodedToken = JSON.parse(storedUser);
-        console.log("the user: &&", decodedToken);
+        // console.log("the user: &&", decodedToken);
         setUser(decodedToken);
       } else {
         navigate("/");

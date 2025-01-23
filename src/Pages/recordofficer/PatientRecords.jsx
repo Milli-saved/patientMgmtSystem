@@ -1,8 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Table from "../../components/Table";
 import AddNewPateintModal from "./AddNewPateintModal";
 import { Toaster } from "sonner";
 import UpdatePatientInfo from "./UpdatePatientInfoModal";
+import { AuthContext } from "../../contexts/auth";
+import { useContext } from "react";
+import AdminTable from "../admin/AdminTable";
+import { apiUtility } from "../../components/repo/api";
+import { Box, Button, Container, Snackbar } from "@mui/material";
+import AddNewPatient from "../admin/AddNewPatientModal";
+import AutohideSnackbar from "../utils/AutohideSnackbar";
+import ExportTable from "../utils/ExportTable";
+import { FaDownload } from "react-icons/fa";
 
 const data = [
   {
@@ -35,12 +44,109 @@ const data = [
 ];
 
 const PatientRecords = () => {
+
+  const { token, user } = useContext(AuthContext);
+  // console.log('usersss', user);
+
+  const [addNewPatient, setAddNewPatient] = useState(false);
+  const [data, setData] = useState(null);
+  const [error, setError] = useState(null);
+  const [update, setUpdate] = useState(false);
+  const [updateDate, setUpdateDate] = useState(null);
+  const [isDone, setIsDone] = useState(false);
+  const [doneMessage, setDoneMessage] = useState("");
+
+  const fetchData = async () => {
+    try {
+      const response = await apiUtility.get("/patient/getAllPatientByHealth/" + user.healthCenterId);
+      if (response.status == true)
+        setData(response.data);
+      console.log('user: ', data);
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const handleAddNewPatient = () => {
+    setAddNewPatient(false);
+    setError("");
+  };
+  const onClose = () => {
+    console.log('onClose');
+    setAddNewPatient(false);
+    fetchData();
+    setError("");
+  }
+  const columns = [
+    { label: "Patient ID", field: "PatientID" },
+    { label: "Full Name", field: "fullName" },
+    { label: "Date Of Birth", field: "DateOfBirth" },
+    { label: "Gender", field: "Gender" },
+    { label: "City", field: "City" },
+    { label: "Sub City", field: "subCity" },
+    { label: "Woreda", field: "Woreda" },
+    { label: "House Number", field: "houseNumber" },
+    { label: "Phone Number", field: "phoneNumber" },
+    { label: "Emergency Contact", field: "EmergencyContact" },
+    { label: "Email", field: "Email" },
+  ];
+
+  const handleModalOpen = () => {
+    setUpdate(true);
+    setError("");
+  }
+
+  const handleModalClose = () => {
+    setUpdate(false);
+    fetchData();
+    setError("");
+  };
+
+  const actions = [
+    {
+      label: "Update",
+      color: "green",
+      onClick: (row) => {
+        console.log("Update clicked for:", row);
+        setUpdateDate(row);
+        setUpdate(true);
+        setError("");
+      },
+    },
+    // {
+    //   label: "Activate",
+    //   color: "gray",
+    //   onClick: async (row) => {
+    //     console.log("Delete clicked for:", row);
+    //     // return;
+    //     try {
+    //       const response = await apiUtility.get("/user/deleteUser/" + row.PatientID);
+    //       console.log('response', response);
+    //       if (response.status == true) {
+    //         await fetchData();
+    //         setError(response.message);
+    //       } else {
+    //         setError(response.message);
+    //       }
+    //     } catch (err) {
+    //       setError(err.message);
+    //     }
+    //   },
+    // },
+  ];
+
   const [createNewPatientModal, setCreateNewPatientModal] = useState(false);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [selectedPatient, setSelectedPatient] = useState({});
 
-  const closeAddNewPatientModal = () => {
+  const closeAddNewPatientModal = (message, isDone) => {
     setCreateNewPatientModal(false);
+    setIsDone(isDone);
+    setDoneMessage(message)
   };
 
   const showPatientDetails = (patientInfo) => {
@@ -49,41 +155,54 @@ const PatientRecords = () => {
   };
 
   const closePatientDetailsModal = () => {
-    setSelectedPatient({});
-    setShowDetailsModal(false);
+    // console.log('message',message, isDone);    
+    setUpdate(false);
+    fetchData();
+    // setIsDone(isDone);
+    // setDoneMessage(message)
   };
 
   return (
     <>
       <div className="mx-10">
-        <Toaster position="top-right" richcolors />
-        <div className="flex justify-center items-center">
-          <h1 className="m-5 text-5xl font-semibold text-gray-800">
-            Patient Records
-          </h1>
-          <button
-            onClick={() => setCreateNewPatientModal(true)}
-            className="text-black bg-green-400 hover:bg-green-700 hover:text-white rounded-lg text-lg p-5 h-8 ms-auto inline-flex justify-center items-center"
-          >
-            Create New patient Record
-          </button>
+        <Toaster position="top-right" richColors />
+        <div className="flex justify-between items-center mb-5">
+          <h1 className="text-5xl font-semibold text-gray-800">Patient Records</h1>
         </div>
+        <Button className="float-end"
+          variant="contained"
+          onClick={() => setCreateNewPatientModal(true)}
+        >
+          Create New Patient Record
+        </Button>
         <div>
-          <h1 className="m-5 text-3xl font-semibold text-gray-800">
-            Patient List
-          </h1>
-          <Table data={data} onEditClicked={showPatientDetails} />
         </div>
+      </div>  
+      <div
+        variant="outlined"
+        className="px-5 py-3 text-white"
+      >
+        <FaDownload className="mr-2" />
+        <ExportTable data={data} fileName="Patient List" />
       </div>
-      {createNewPatientModal && (
-        <AddNewPateintModal onClose={closeAddNewPatientModal} />
-      )}
-      {showDetailsModal && (
+      <div>
+        <AdminTable data={data} columns={columns} actions={actions} />
+      </div>
+      <Container>
+        <Box sx={{m:5}}>
+        {createNewPatientModal && (
+          <AddNewPatient onClose={closeAddNewPatientModal} />
+        )}
+        </Box>
+      </Container>
+      {update && (
         <UpdatePatientInfo
           onClose={closePatientDetailsModal}
-          selectedPatient={selectedPatient}
+          data={updateDate}
         />
       )}
+
+      {isDone && <AutohideSnackbar message={doneMessage} />}
     </>
   );
 };

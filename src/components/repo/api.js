@@ -35,7 +35,7 @@ export const apiUtility = {
                 body: JSON.stringify(body),
             });
             if (!response.ok) {
-                throw new Error(`POST request failed with status: ${response.status}`);
+                return response.json();
             }
             return await response.json();
         } catch (error) {

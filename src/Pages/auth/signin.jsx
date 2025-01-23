@@ -238,6 +238,7 @@ const Signin = () => {
               email: result.data.email,
               phoneNumber: result.data.phoneNumber,
               role: result.data.role,
+              healthCenterId: result.data.healthCenterId
             };
             setUser(user);
             window.localStorage.setItem("user", JSON.stringify(user));
@@ -252,10 +253,10 @@ const Signin = () => {
           setError("Unknown role. Please contact your administrator.");
         }
       } else {
-        throw new Error("Invalid response from server");
+        setError("Invalid username or password.");
       }
     } catch (error) {
-      setError("Either username or password is incorrect. Please try again.");
+      setError("Unable to connect to server.");
     } finally {
       setLoading(false);
     }

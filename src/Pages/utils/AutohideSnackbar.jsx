@@ -1,16 +1,22 @@
 import * as React from 'react';
 import Button from '@mui/material/Button';
 import Snackbar from '@mui/material/Snackbar';
+import { IconButton } from '@mui/material';
+import { GridCloseIcon } from '@mui/x-data-grid';
 
-export default function AutohideSnackbar({ header, message }) {
+const AutohideSnackbar = ({ message }) => {
+    console.log('reach heereee', message, openIt);
     return (
         <div>
-            <Button onClick={handleClick}>{header}</Button>
             <Snackbar
+                open="true"
                 autoHideDuration={5000}
-                onClose={handleClose}
+                // onClose={handleClose}
                 message={message}
+            // action={action}
             />
         </div>
     );
 }
+
+export default AutohideSnackbar;
