@@ -48,12 +48,7 @@ const RoleBasedViews = {
         label: "Manage User",
         component: React.createElement(ManageUser),
         icons: FaUser,
-      },
-      "/manage-patients": {
-        label: "Manage Patients",
-        component: React.createElement(ManagePatients),
-        icons: FaHospitalUser,
-      },
+      }
     },
   },
   patient: {
@@ -121,6 +116,7 @@ const RoleBasedViews = {
       },
     },
   },
+
   healthofficer: {
     name: "Health Officer",
     routes: {
@@ -129,8 +125,14 @@ const RoleBasedViews = {
         component: React.createElement(HealthOfficerHome),
         icons: FaHome,
       },
+      "/manage-patients": {
+        label: "Manage Patients",
+        component: React.createElement(ManagePatients),
+        icons: FaHospitalUser,
+      },
     },
   },
+
   recordofficer: {
     name: "Record Officer",
     routes: {
@@ -151,6 +153,7 @@ const RoleBasedViews = {
       },
     },
   },
+  
   cashier: {
     name: "Cashier",
     routes: {

@@ -57,7 +57,7 @@ const UpdateUser = ({ open, onClose, data }) => {
 
     const handleSubmit = async () => {
         const response = await apiUtility.post(`/user/updateUser/${formData.userName}`, formData);
-        // console.log('update user', response);
+        console.log('update user', response.status);
         if (response.status == true) {
             setError(response.message);
             onClose();

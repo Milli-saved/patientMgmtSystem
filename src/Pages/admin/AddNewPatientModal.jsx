@@ -16,7 +16,7 @@
 //   return response.json();
 // };
 
-// const AddNewPatient = ({ handleAddNewPatient }) => {
+// const AddNewPatient = ({ onClose }) => {
 //   const [patientInfo, setPatientInfo] = useState({
 //     fullName: "",
 //     DateOfBirth: "",
@@ -72,7 +72,7 @@
 //             <button
 //               type="button"
 //               className="text-white bg-transparent hover:bg-gray-700 hover:text-white rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center"
-//               onClick={handleAddNewPatient}
+//               onClick={onClose}
 //             >
 //               <svg
 //                 className="w-3 h-3"
@@ -317,7 +317,7 @@
 //                 Create
 //               </button>
 //               <button
-//                 onClick={handleAddNewPatient}
+//                 onClick={onClose}
 //                 className="py-2 px-5 text-gray-900 bg-slate-400 rounded-xl "
 //               >
 //                 Cancel
@@ -333,7 +333,7 @@
 // export default AddNewPatient;
 
 
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   Box,
   Button,
@@ -349,23 +349,12 @@ import {
 } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
+import { apiUtility } from "../../components/repo/api";
+import { AuthContext } from "../../contexts/auth";
+import AutohideSnackbar from "../utils/AutohideSnackbar";
 
-const createPatient = async (patient) => {
-  const response = await fetch(
-    `${process.env.REACT_APP_API_URL}/v1/users/add_employee`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(patient),
-    }
-  );
-  if (!response.ok) throw new Error("Failed to create patient");
-  return response.json();
-};
 
-const AddNewPatient = ({ handleAddNewPatient }) => {
+const AddNewPatient = ({ onClose }) => {
   const [patientInfo, setPatientInfo] = useState({
     fullName: "",
     DateOfBirth: "",
@@ -379,7 +368,23 @@ const AddNewPatient = ({ handleAddNewPatient }) => {
     Email: "",
     CreatedBy: "admin",
   });
+  const [error, setError] = useState('');
 
+  const clearData = ()=>{
+    setPatientInfo({
+      fullName: "",
+      DateOfBirth: "",
+      Gender: "",
+      City: "",
+      subCity: "",
+      Woreda: "",
+      houseNumber: "",
+      phoneNumber: "",
+      EmergencyContact: "",
+      Email: "",
+      CreatedBy: "admin",
+    });
+  }
   const changeHandler = (e) => {
     const { name, value } = e.target;
     setPatientInfo({
@@ -387,34 +392,59 @@ const AddNewPatient = ({ handleAddNewPatient }) => {
       [name]: value,
     });
   };
+  const { token, user } = useContext(AuthContext);
 
-  const addPatientMutation = useMutation({
-    mutationFn: createPatient,
-    onSuccess: () => {
-      toast.success("Patient created successfully");
-      handleAddNewPatient();
-    },
-    onError: () => {
-      toast.error("Error adding Patient");
-    },
-  });
+  const createPatient = async (patient) => {
+    try {
+      console.log('user', user);
+      patient.healthCenterId = user.healthCenterId;
+      console.log('patient', patient);
+      const response = await apiUtility.post("/patient/createPatient", patient);
+      console.log('response: ', response);
+      if (response.status == true) {
+        setError(response.message);
+        clearData();
+        <AutohideSnackbar message={response.message} openIt="true" />
+      } else {
+        <AutohideSnackbar message={response.message} openIt="true" />
+        setError(response.message);
+      }
+    } catch (err) {
+      setError("Error creating Patient");
+      // <AutohideSnackbar />
+      <AutohideSnackbar message={err} openIt={true} />
+      return;
+    }
+  }
+  // const addPatientMutation = useMutation({
+  //   mutationFn: createPatient,
+  //   onSuccess: () => {
+  //     toast.success("Patient created successfully");
+  //     // onClose(false);
+  //     clearData();
+  //   },
+  //   onError: () => {
+  //     toast.error("Error adding Patient");
+  //   },
+  // });
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    addPatientMutation.mutate(patientInfo);
-
+    // addPatientMutation.mutate(patientInfo);
+    createPatient(patientInfo);
   };
 
   return (
-    <Dialog open={true} onClose={handleAddNewPatient} fullWidth maxWidth="md">
+    <Dialog open={true} onClose={onClose} fullWidth maxWidth="md">
       <DialogTitle sx={{ bgcolor: "#154C79", color: "white" }}>
         Create New Patient
       </DialogTitle>
       <DialogContent>
         <Typography variant="h6" gutterBottom>
-          Health Center
+          {/* Health Center */}
+          
         </Typography>
-        <Select
+        {/* <Select
           fullWidth
           name="HealthCenter"
           onChange={changeHandler}
@@ -424,8 +454,7 @@ const AddNewPatient = ({ handleAddNewPatient }) => {
           <MenuItem value="Health care one">Health care one</MenuItem>
           <MenuItem value="Health care two">Health care two</MenuItem>
           <MenuItem value="Health care three">Health care three</MenuItem>
-        </Select>
-
+        </Select> */}
         <Typography variant="h6" gutterBottom>
           Personal Information
         </Typography>
@@ -434,6 +463,7 @@ const AddNewPatient = ({ handleAddNewPatient }) => {
             <TextField
               label="Full Name"
               name="fullName"
+              value={patientInfo.fullName}
               fullWidth
               onChange={changeHandler}
             />
@@ -443,10 +473,12 @@ const AddNewPatient = ({ handleAddNewPatient }) => {
               name="Gender"
               fullWidth
               defaultValue=""
+              value={patientInfo.Gender}
               onChange={changeHandler}
             >
-              <MenuItem value="male">Male</MenuItem>
-              <MenuItem value="female">Female</MenuItem>
+              <MenuItem >Select Gender</MenuItem>
+              <MenuItem value="Male">Male</MenuItem>
+              <MenuItem value="Female">Female</MenuItem>
             </Select>
           </Grid>
           <Grid item xs={12} md={6}>
@@ -454,6 +486,7 @@ const AddNewPatient = ({ handleAddNewPatient }) => {
               label="Date of Birth"
               name="DateOfBirth"
               type="date"
+              value={patientInfo.DateOfBirth}
               fullWidth
               InputLabelProps={{ shrink: true }}
               onChange={changeHandler}
@@ -463,6 +496,7 @@ const AddNewPatient = ({ handleAddNewPatient }) => {
             <TextField
               label="Phone Number"
               name="phoneNumber"
+              value={patientInfo.phoneNumber}
               fullWidth
               onChange={changeHandler}
             />
@@ -478,6 +512,7 @@ const AddNewPatient = ({ handleAddNewPatient }) => {
               label="Email"
               name="Email"
               fullWidth
+              value={patientInfo.Email}
               onChange={changeHandler}
             />
           </Grid>
@@ -485,6 +520,7 @@ const AddNewPatient = ({ handleAddNewPatient }) => {
             <TextField
               label="City"
               name="City"
+              value={patientInfo.City}
               fullWidth
               onChange={changeHandler}
             />
@@ -493,6 +529,7 @@ const AddNewPatient = ({ handleAddNewPatient }) => {
             <TextField
               label="SubCity"
               name="subCity"
+              value={patientInfo.subCity}
               fullWidth
               onChange={changeHandler}
             />
@@ -501,6 +538,7 @@ const AddNewPatient = ({ handleAddNewPatient }) => {
             <TextField
               label="Woreda"
               name="Woreda"
+              value={patientInfo.Woreda}
               fullWidth
               onChange={changeHandler}
             />
@@ -509,6 +547,7 @@ const AddNewPatient = ({ handleAddNewPatient }) => {
             <TextField
               label="House Number"
               name="houseNumber"
+              value={patientInfo.houseNumber}
               fullWidth
               onChange={changeHandler}
             />
@@ -521,15 +560,18 @@ const AddNewPatient = ({ handleAddNewPatient }) => {
         <TextField
           label="Emergency Contact"
           name="EmergencyContact"
+              value={patientInfo.EmergencyContact}
           fullWidth
           onChange={changeHandler}
         />
       </DialogContent>
+
+      {error && <DialogContent>{error}</DialogContent>}
       <DialogActions>
         <Button onClick={handleSubmit} variant="contained" color="primary">
           Create
         </Button>
-        <Button onClick={handleAddNewPatient} variant="outlined" color="secondary">
+        <Button onClick={onClose} variant="outlined" color="secondary">
           Cancel
         </Button>
       </DialogActions>
