@@ -29,6 +29,7 @@ import ReferralList from "./recordofficer/ReferralList";
 
 import CashierDashboard from "./cashier/Dashboard";
 import CashierFeedback from "./cashier/feedback";
+import PasswordResetPage from "./admin/PasswordResetPage";
 
 const RoleBasedViews = {
   admin: {
@@ -47,6 +48,11 @@ const RoleBasedViews = {
       "/manage-user": {
         label: "Manage User",
         component: React.createElement(ManageUser),
+        icons: FaUser,
+      },
+      "/reset": {
+        label: "Reset Password",
+        component: React.createElement(PasswordResetPage),
         icons: FaUser,
       }
     },
