@@ -8,6 +8,7 @@ import AdminTable from "../admin/AdminTable";
 import { apiUtility } from "../../components/repo/api";
 import { useContext } from "react";
 import { AuthContext } from "../../contexts/auth";
+import AutohideSnackbar from "../utils/AutohideSnackbar";
 
 const data = [
   {
@@ -91,16 +92,23 @@ const AssignPatientToDoctor = () => {
         // setError("");
       },
     },
-  ];const action1 = [
+  ];
+  const [unassignedresponse, setUnAssignResponse] = useState("");
+
+  const action1 = [
     {
       label: "Un Assign",
       color: "gray",
-      onClick: (row) => {
-        console.log("Update clicked for:", row);
-        setSelectedPatient(row);
-        setAssignPatientModal(true);
-        // setUpdate(true);
-        // setError("");
+      onClick: async (row) => {
+        console.log("un assigned clicked for:", row);
+        try {
+          const response = await apiUtility.get("/patient/unAssignPatient/" + row.PatientID);
+          // if(response.status == true){
+          <AutohideSnackbar message={response.message} />
+          setUnAssignResponse(response.message);
+        } catch (err) {
+          setUnAssignResponse("Unable to un assign patient");
+        }
       },
     },
   ];
@@ -130,6 +138,7 @@ const AssignPatientToDoctor = () => {
           <h1 className="m-5 text-3xl font-semibold text-gray-800">
             Assigned Patient List
           </h1>
+          {unassignedresponse && unassignedresponse}
           <div>
             <AdminTable data={data} columns={columns} actions={action1} />
           </div>
