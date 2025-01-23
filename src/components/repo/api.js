@@ -10,7 +10,9 @@ export const apiUtility = {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                },
+                    'Cache-Control': 'no-cache', // Disable caching
+                    Pragma: 'no-cache', // Fallback for HTTP/1.0
+                  },
             });
             if (!response.ok) {
                 throw new Error(`GET request failed with status: ${response.status}`);
