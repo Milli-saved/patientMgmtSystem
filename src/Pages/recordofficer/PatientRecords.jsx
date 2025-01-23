@@ -7,9 +7,11 @@ import { AuthContext } from "../../contexts/auth";
 import { useContext } from "react";
 import AdminTable from "../admin/AdminTable";
 import { apiUtility } from "../../components/repo/api";
-import { Button, Snackbar } from "@mui/material";
+import { Box, Button, Container, Snackbar } from "@mui/material";
 import AddNewPatient from "../admin/AddNewPatientModal";
 import AutohideSnackbar from "../utils/AutohideSnackbar";
+import ExportTable from "../utils/ExportTable";
+import { FaDownload } from "react-icons/fa";
 
 const data = [
   {
@@ -73,7 +75,7 @@ const PatientRecords = () => {
     setAddNewPatient(false);
     setError("");
   };
-  const onClose=()=>{
+  const onClose = () => {
     console.log('onClose');
     setAddNewPatient(false);
     fetchData();
@@ -141,7 +143,7 @@ const PatientRecords = () => {
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [selectedPatient, setSelectedPatient] = useState({});
 
-  const closeAddNewPatientModal = (message,isDone) => {
+  const closeAddNewPatientModal = (message, isDone) => {
     setCreateNewPatientModal(false);
     setIsDone(isDone);
     setDoneMessage(message)
@@ -163,34 +165,44 @@ const PatientRecords = () => {
   return (
     <>
       <div className="mx-10">
-        <Toaster position="top-right" richcolors />
-        <div className="flex justify-between items-center">
-          <h1 className="m-5 text-5xl font-semibold text-gray-800">
-            Patient Records
-          </h1>
-          <Button variant="contained" className="float-right"
-            onClick={() => setCreateNewPatientModal(true)}
-          >
-            Create New patient Record
-          </Button>
+        <Toaster position="top-right" richColors />
+        <div className="flex justify-between items-center mb-5">
+          <h1 className="text-5xl font-semibold text-gray-800">Patient Records</h1>
         </div>
+        <Button className="float-end"
+          variant="contained"
+          onClick={() => setCreateNewPatientModal(true)}
+        >
+          Create New Patient Record
+        </Button>
         <div>
-          <h1 className="m-5 text-3xl font-semibold text-gray-800">
-            Patient List
-          </h1>
-          <AdminTable data={data && data} columns={columns} actions={actions} />
-          </div>
+        </div>
+      </div>  
+      <div
+        variant="outlined"
+        className="px-5 py-3 text-white"
+      >
+        <FaDownload className="mr-2" />
+        <ExportTable data={data} fileName="Patient List" />
       </div>
-      {createNewPatientModal && (
-        <AddNewPatient onClose={closeAddNewPatientModal} />
-      )}
+      <div>
+        <AdminTable data={data} columns={columns} actions={actions} />
+      </div>
+      <Container>
+        <Box sx={{m:5}}>
+        {createNewPatientModal && (
+          <AddNewPatient onClose={closeAddNewPatientModal} />
+        )}
+        </Box>
+      </Container>
       {update && (
         <UpdatePatientInfo
           onClose={closePatientDetailsModal}
           data={updateDate}
         />
       )}
-    {isDone && <AutohideSnackbar message={doneMessage} />}
+
+      {isDone && <AutohideSnackbar message={doneMessage} />}
     </>
   );
 };
