@@ -7,8 +7,9 @@ import { AuthContext } from "../../contexts/auth";
 import { useContext } from "react";
 import AdminTable from "../admin/AdminTable";
 import { apiUtility } from "../../components/repo/api";
-import { Button } from "@mui/material";
+import { Button, Snackbar } from "@mui/material";
 import AddNewPatient from "../admin/AddNewPatientModal";
+import AutohideSnackbar from "../utils/AutohideSnackbar";
 
 const data = [
   {
@@ -50,6 +51,8 @@ const PatientRecords = () => {
   const [error, setError] = useState(null);
   const [update, setUpdate] = useState(false);
   const [updateDate, setUpdateDate] = useState(null);
+  const [isDone, setIsDone] = useState(false);
+  const [doneMessage, setDoneMessage] = useState("");
 
   const fetchData = async () => {
     try {
@@ -112,34 +115,36 @@ const PatientRecords = () => {
         setError("");
       },
     },
-    {
-      label: "Delete",
-      color: "red",
-      onClick: async (row) => {
-        console.log("Delete clicked for:", row);
-        return;
-        try {
-          const response = await apiUtility.get("/user/deleteUser/" + row.userName);
-          console.log('response', response);
-          if (response.status == true) {
-            await fetchData();
-            setError(response.message);
-          } else {
-            setError(response.message);
-          }
-        } catch (err) {
-          setError(err.message);
-        }
-      },
-    },
+    // {
+    //   label: "Activate",
+    //   color: "gray",
+    //   onClick: async (row) => {
+    //     console.log("Delete clicked for:", row);
+    //     // return;
+    //     try {
+    //       const response = await apiUtility.get("/user/deleteUser/" + row.PatientID);
+    //       console.log('response', response);
+    //       if (response.status == true) {
+    //         await fetchData();
+    //         setError(response.message);
+    //       } else {
+    //         setError(response.message);
+    //       }
+    //     } catch (err) {
+    //       setError(err.message);
+    //     }
+    //   },
+    // },
   ];
 
   const [createNewPatientModal, setCreateNewPatientModal] = useState(false);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [selectedPatient, setSelectedPatient] = useState({});
 
-  const closeAddNewPatientModal = () => {
+  const closeAddNewPatientModal = (message,isDone) => {
     setCreateNewPatientModal(false);
+    setIsDone(isDone);
+    setDoneMessage(message)
   };
 
   const showPatientDetails = (patientInfo) => {
@@ -148,8 +153,11 @@ const PatientRecords = () => {
   };
 
   const closePatientDetailsModal = () => {
-    setSelectedPatient({});
-    setShowDetailsModal(false);
+    // console.log('message',message, isDone);    
+    setUpdate(false);
+    fetchData();
+    // setIsDone(isDone);
+    // setDoneMessage(message)
   };
 
   return (
@@ -176,12 +184,13 @@ const PatientRecords = () => {
       {createNewPatientModal && (
         <AddNewPatient onClose={closeAddNewPatientModal} />
       )}
-      {showDetailsModal && (
+      {update && (
         <UpdatePatientInfo
           onClose={closePatientDetailsModal}
-          selectedPatient={selectedPatient}
+          data={updateDate}
         />
       )}
+    {isDone && <AutohideSnackbar message={doneMessage} />}
     </>
   );
 };
