@@ -91,6 +91,18 @@ const AssignPatientToDoctor = () => {
         // setError("");
       },
     },
+  ];const action1 = [
+    {
+      label: "Un Assign",
+      color: "gray",
+      onClick: (row) => {
+        console.log("Update clicked for:", row);
+        setSelectedPatient(row);
+        setAssignPatientModal(true);
+        // setUpdate(true);
+        // setError("");
+      },
+    },
   ];
   const closeAssignModal = () => {
     setAssignPatientModal(false);
@@ -114,6 +126,14 @@ const AssignPatientToDoctor = () => {
             <AdminTable data={data} columns={columns} actions={actions} />
           </div>
         </div>
+        <div>
+          <h1 className="m-5 text-3xl font-semibold text-gray-800">
+            Assigned Patient List
+          </h1>
+          <div>
+            <AdminTable data={data} columns={columns} actions={action1} />
+          </div>
+        </div>
       </div>
       {assignPatientModal && (
         <AssignPatientToDocModal
@@ -121,6 +141,7 @@ const AssignPatientToDoctor = () => {
           patientInfo={selectedPatient}
         />
       )}
+
     </>
   );
 };

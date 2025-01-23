@@ -57,13 +57,13 @@ const AdminTable = ({ data, columns, actions }) => {
   // console.log('column', columns);
   
   const enhancedColumns = [
-    ...columns.map((col) => ({ field: col.field, headerName: col.label, flex: 1 })),
+    ...columns.map((col) => ({ field: col.field, headerName: col.label, width:"150" })),
     ...(actions
       ? [
           {
             field: "actions",
             headerName: "Actions",
-            flex: 1,
+            width:"150",
             renderCell: (params) => (
               <div style={{ display: "block", gap: "0px" }}>
                 {actions.map((action, index) => (
@@ -91,14 +91,13 @@ const AdminTable = ({ data, columns, actions }) => {
   ];
 
   return (
-    <div style={{ height: 400, width:"auto"}}>
+    <div style={{ height: 400, width: '100%' }}>
       <DataGrid
         rows={rowsWithIds}
         columns={enhancedColumns}
         pageSize={5}
         style={{padding:"5px"}}
-        rowsPerPageOptions={[5, 10, 20]}
-        width={200}
+        rowsPerPageOptions={[5, 10, 20]}        
       />
     </div>
   );
