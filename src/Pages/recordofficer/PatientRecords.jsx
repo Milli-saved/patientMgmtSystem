@@ -46,7 +46,7 @@ const data = [
 const PatientRecords = () => {
 
   const { token, user } = useContext(AuthContext);
-  console.log('usersss', user);
+  // console.log('usersss', user);
 
   const [addNewPatient, setAddNewPatient] = useState(false);
   const [data, setData] = useState(null);

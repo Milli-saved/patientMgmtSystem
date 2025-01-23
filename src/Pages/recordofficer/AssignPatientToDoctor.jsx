@@ -1,7 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Toaster } from "sonner";
 import Table from "../../components/Table";
 import AssignPatientToDocModal from "./AssignPatientToDocModal";
+import { Box, Container } from "@mui/material";
+import AddNewPatient from "../admin/AddNewPatientModal";
+import AdminTable from "../admin/AdminTable";
+import { apiUtility } from "../../components/repo/api";
+import { useContext } from "react";
+import { AuthContext } from "../../contexts/auth";
 
 const data = [
   {
@@ -37,12 +43,55 @@ const AssignPatientToDoctor = () => {
   const [assignPatientModal, setAssignPatientModal] = useState(false);
 
   const [selectedPatient, setSelectedPatient] = useState({});
-
+  const { token, user } = useContext(AuthContext);
+  const [data, setData] = useState(null);
+  const [addNewPatient, setAddNewPatient] = useState(false);
   const detailsClicked = (patientDetail) => {
     setAssignPatientModal(true);
     setSelectedPatient(patientDetail);
   };
 
+  const fetchData = async () => {
+    try {
+      const response = await apiUtility.get("/patient/getAllPatientByHealth/" + user.healthCenterId);
+      if (response.status == true)
+        setData(response.data);
+      console.log('user: ', data);
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const columns = [
+    { label: "Patient ID", field: "PatientID" },
+    { label: "Full Name", field: "fullName" },
+    { label: "Date Of Birth", field: "DateOfBirth" },
+    { label: "Gender", field: "Gender" },
+    { label: "City", field: "City" },
+    { label: "Sub City", field: "subCity" },
+    { label: "Woreda", field: "Woreda" },
+    { label: "House Number", field: "houseNumber" },
+    { label: "Phone Number", field: "phoneNumber" },
+    { label: "Emergency Contact", field: "EmergencyContact" },
+    { label: "Email", field: "Email" },
+  ];
+  const actions = [
+    {
+      label: "Assign",
+      color: "gray",
+      onClick: (row) => {
+        console.log("Update clicked for:", row);
+        setSelectedPatient(row);
+        setAssignPatientModal(true);
+        // setUpdate(true);
+        // setError("");
+      },
+    },
+  ];
   const closeAssignModal = () => {
     setAssignPatientModal(false);
     setSelectedPatient({});
@@ -56,24 +105,20 @@ const AssignPatientToDoctor = () => {
           <h1 className="m-5 text-5xl font-semibold text-gray-800">
             Assign Patient To Doctors
           </h1>
-          {/* <button
-            // onClick={() => setCreateNewPatientModal(true)}
-            className="text-black bg-green-400 hover:bg-green-700 hover:text-white rounded-lg text-lg p-5 h-8 ms-auto inline-flex justify-center items-center"
-          >
-            Create New patient Record
-          </button> */}
         </div>
         <div>
           <h1 className="m-5 text-3xl font-semibold text-gray-800">
             Patient List
           </h1>
-          <Table data={data} onEditClicked={detailsClicked} />
+          <div>
+            <AdminTable data={data} columns={columns} actions={actions} />
+          </div>
         </div>
       </div>
       {assignPatientModal && (
         <AssignPatientToDocModal
           onClose={closeAssignModal}
-          selectedPatient={selectedPatient}
+          patientInfo={selectedPatient}
         />
       )}
     </>
