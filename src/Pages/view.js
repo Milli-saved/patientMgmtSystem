@@ -27,7 +27,7 @@ import PatientRecords from "./recordofficer/PatientRecords";
 import AssignPatientToDoctor from "./recordofficer/AssignPatientToDoctor";
 import ReferralList from "./recordofficer/ReferralList";
 
-import CashierDashboard from "./cashier/Dashboard";
+import CashierDashboard from "./cashier/BillPayment";
 import CashierFeedback from "./cashier/feedback";
 import PasswordResetPage from "./admin/PasswordResetPage";
 
@@ -182,7 +182,7 @@ const RoleBasedViews = {
     name: "Cashier",
     routes: {
       "/dashboard": {
-        label: "Patient Records",
+        label: "Bill Records",
         component: React.createElement(CashierDashboard),
         icons: FaHome,
       },
