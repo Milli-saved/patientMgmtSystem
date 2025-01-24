@@ -137,11 +137,11 @@ import { apiUtility } from '../../components/repo/api';
 import { AuthContext } from '../../contexts/auth';
 
 const AssignPatientToDocModal = ({onClose, patientInfo }) => {
-  console.log('in assignPatientToDocModal', patientInfo);
+  // console.log('in assignPatientToDocModal', patientInfo);
   
   const patientName = patientInfo.fullName;
   const patientID = patientInfo.PatientID;
-console.log('in assignPatientToDocModal',patientName, patientID);
+// console.log('in assignPatientToDocModal',patientName, patientID);
   const [error, setError] = useState(null);
 
   const [doctors, setDoctors] = useState([]);

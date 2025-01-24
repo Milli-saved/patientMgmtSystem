@@ -9,11 +9,10 @@ import {
   Grid,
   Box,
   Typography,
-  Snackbar,
-  Alert,
 } from "@mui/material";
 import { apiUtility } from "../../components/repo/api";
 import { AuthContext } from "../../contexts/auth";
+import SnackBarShow from "./SnackBarShow";
 
 const PhysicianSettings = () => {
   const [formData, setFormData] = useState({
@@ -26,20 +25,20 @@ const PhysicianSettings = () => {
     healthCenterId: "",
   });
   const [newPassword, setNewPassword] = useState({
-    confirmPassword:"",
+    confirmPassword: "",
     oldPassword: "",
     newPassword: "",
   });
   const [message, setMessage] = useState("");
   const [error, setError] = useState(false);
- const {user} = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
   // Function to fetch current user data from the API
   const fetchUserData = async () => {
     try {
       // Replace with your API endpoint
       const response = await apiUtility.get(`/user/getUser/${user.userName}`);
       const data = response.data;
-      console.log('data', data);        
+      console.log('data', data);
       if (data) {
         setFormData({
           userName: data.userName,
@@ -77,12 +76,12 @@ const PhysicianSettings = () => {
       setError(true);
       return;
     }
-const datatosend = {
-  oldPassword: newPassword.oldPassword,
-  newPassword: newPassword.newPassword,
-}
+    const datatosend = {
+      oldPassword: newPassword.oldPassword,
+      newPassword: newPassword.newPassword,
+    }
     try {
-      const response = await apiUtility.post(`/user/changePassword/${user.userName}`,datatosend);
+      const response = await apiUtility.post(`/user/changePassword/${user.userName}`, datatosend);
       if (response) {
         setMessage(response.message);
         setError(false);
@@ -242,13 +241,11 @@ const datatosend = {
       </Box>
 
       {/* Snackbar for feedback */}
-      <Snackbar open={!!message} autoHideDuration={6000} onClose={() => setMessage("")}>
-        <Alert onClose={() => setMessage("")} severity={error ? "error" : "success"}>
-          {message}
-        </Alert>
-      </Snackbar>
+      {SnackBarShow(message, setMessage, error)}
     </>
   );
 };
 
-export default PhysicianSettings;
+export default  PhysicianSettings;
+
+
