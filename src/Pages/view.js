@@ -137,13 +137,17 @@ const RoleBasedViews = {
     routes: {
       "/dashboard": {
         label: "Manage Health Center",
-        component: React.createElement(HealthOfficerHome),
+        component: React.createElement(ManageHealthCenter),
         icons: FaHome,
       },
       "/manage-patients": {
         label: "Manage Patients",
         component: React.createElement(ManagePatients),
         icons: FaHospitalUser,
+      }, "/feedback": {
+        label: "Feedback",
+        component: React.createElement(CashierFeedback),
+        icons: FaUserDoctor,
       }, "/settings": {
         label: "Settings",
         component: React.createElement(PhysicianSettings),

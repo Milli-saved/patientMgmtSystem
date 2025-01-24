@@ -1,74 +1,66 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import React from "react";
+import React, { useContext, useState } from "react";
 import { Toaster } from "sonner";
-
-const getAllFeedbacks = async () => {
-  try {
-    const response = await axios.get(
-      `${import.meta.env.VITE_API_URL}/feedback/getFeedback`
-    );
-    return response.data.data;
-  } catch (error) {
-    return error.message;
-  }
-};
+import { AuthContext } from "../../contexts/auth";
+import { apiUtility } from "../../components/repo/api";
+import { useEffect } from "react";
+import AdminTable from "../admin/AdminTable";
+import { Typography, Box, Grid, Container } from '@mui/material';
 
 const feedback = () => {
-  const {
-    data: feedbackData,
-    isLoading: feedbackDataLoading,
-    isError: feedbackDataError,
-  } = useQuery({
-    queryKey: ["allfeedbacks"],
-    queryFn: getAllFeedbacks,
-  });
+  const [data, setData] = useState(null);
+  const fetchData = async () => {
+    try {
+      const response = await apiUtility.get("/feedback/getFeedback");
+      console.log('response', response);
 
-  console.log("the feedbacks: ", feedbackData.data);
+      if (response.status == true)
+        setData(response.data);
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const columns = [
+    { label: "Feedback ID", field: "feedbackID" },
+    { label: "Date", field: "date" },
+    { label: "Content", field: "content" },
+    { label: "To", field: "toWhom" },
+    { label: "Full Name", field: "patientName" },
+    { label: "Phone Number", field: "patientPhone" },
+    { label: "Email", field: "patientEmail" },
+    { label: "Sub city", field: "patientSubCity" },
+    { label: "Woreda", field: "patientWoreda" },
+    { label: "House Number", field: "patientHouseNumber" },
+    { label: "Emergency Contact", field: "patientEmergencyContact" },
+  ];
   return (
     <>
-      <div className="mx-10">
-        <Toaster position="top-right" richcolors />
-        <div className="flex justify-center items-center">
-          <h1 className="m-5 text-5xl font-semibold text-gray-800">
-            Feedbacks
-          </h1>
-          {/* <button
-            // onClick={() => setCreateNewPatientModal(true)}
-            className="text-black bg-green-400 hover:bg-green-700 hover:text-white rounded-lg text-lg p-5 h-8 ms-auto inline-flex justify-center items-center"
-          >
-            Create New patient Record
-          </button> */}
-        </div>
-        <div>
-          <h1 className="m-5 text-3xl font-semibold text-gray-800">
-            Feedback List
-          </h1>
-          {/* <Table data={data} /> */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-            {feedbackData &&
-              feedbackData.data.map((eachFeedback, index) => (
-                <div
-                  key={index}
-                  className={`relative bg-white shadow-md rounded-xl p-8 border transition duration-300 ease-in-out transform hover:shadow-xl`}
-                >
-                  <div className="flex justify-between items-center">
-                    <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                      Patient Id: {eachFeedback.patientID}
-                    </h3>
-                  </div>
-                  <p className="text-gray-700 mb-1">
-                    Date: {eachFeedback.date}{" "}
-                  </p>
+      <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+        <Toaster position="top-right" />
 
-                  <p className="text-gray-800 font-semibold">
-                    content : {eachFeedback.content}{" "}
-                  </p>
-                </div>
-              ))}
-          </div>
-        </div>
-      </div>
+        {/* Title */}
+        <Box display="flex" justifyContent="center" alignItems="center" mb={5}>
+          <Typography variant="h1" component="h1" fontSize="2.5rem" fontWeight="bold" color="text.primary">
+            Feedbacks
+          </Typography>
+        </Box>
+
+        <Box mb={5}>
+          <Typography variant="h2" component="h2" fontSize="1.875rem" fontWeight="bold" color="text.primary" mb={2}>
+            Feedback List
+          </Typography>
+          <Grid container spacing={3}>
+            <Grid item xs={12}>
+              <AdminTable data={data} columns={columns} />
+            </Grid>
+          </Grid>
+        </Box>
+      </Container>
     </>
   );
 };
