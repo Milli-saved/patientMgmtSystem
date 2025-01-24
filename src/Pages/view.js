@@ -31,6 +31,7 @@ import CashierDashboard from "./cashier/BillPayment";
 import CashierFeedback from "./cashier/feedback";
 import PasswordResetPage from "./admin/PasswordResetPage";
 import AppointmentPage from "./Physician/AppointmentPage";
+import PrescriptionPage from "./Physician/PrescriptionPage";
 
 const RoleBasedViews = {
   admin: {
@@ -99,6 +100,11 @@ const RoleBasedViews = {
       "/appointment": {
         label: "Appointment",
         component: React.createElement(AppointmentPage),
+        icons: FaHome,
+      },
+      "/prescription": {
+        label: "Prescription",
+        component: React.createElement(PrescriptionPage),
         icons: FaHome,
       },
       // "/report": {
