@@ -130,7 +130,7 @@ const ManagePatient = () => {
         <AdminTable data={data && data} columns={columns} actions={actions} />
       </div>
       {addNewPatient && (
-        <AddNewPatient handleAddNewPatient={handleAddNewPatient} />
+        <AddNewPatient onClose={handleAddNewPatient} />
       )}
     </div>
   );
