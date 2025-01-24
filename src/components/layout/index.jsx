@@ -63,6 +63,7 @@ function AuthenticatedRoutes() {
       <Route path="/feedback" element={<ProtectedRoute />} />
       <Route path="/resetPassword" element={<ResetPassword/>} />
       <Route path="/reset" element={<ProtectedRoute/>} />
+      <Route path="/appointment" element={<ProtectedRoute/>} />
     </Routes>
   );
 }

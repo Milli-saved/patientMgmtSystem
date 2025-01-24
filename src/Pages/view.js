@@ -30,6 +30,7 @@ import ReferralList from "./recordofficer/ReferralList";
 import CashierDashboard from "./cashier/BillPayment";
 import CashierFeedback from "./cashier/feedback";
 import PasswordResetPage from "./admin/PasswordResetPage";
+import AppointmentPage from "./Physician/AppointmentPage";
 
 const RoleBasedViews = {
   admin: {
@@ -86,7 +87,7 @@ const RoleBasedViews = {
     name: "Physician",
     routes: {
       "/dashboard": {
-        label: "Appointments",
+        label: "Medical History",
         component: React.createElement(PhysicianHome),
         icons: FaHome,
       },
@@ -95,9 +96,9 @@ const RoleBasedViews = {
         component: React.createElement(Referrals),
         icons: FaHome,
       },
-      "/labtestandprescription": {
-        label: "Lab Test & Prescriptions",
-        component: React.createElement(LabTestAndPrescription),
+      "/appointment": {
+        label: "Appointment",
+        component: React.createElement(AppointmentPage),
         icons: FaHome,
       },
       // "/report": {
@@ -117,7 +118,7 @@ const RoleBasedViews = {
     routes: {
       "/dashboard": {
         label: "Lab Test & Prescriptions",
-        component: React.createElement(LabHome),
+        component: React.createElement(LabTestAndPrescription),
         icons: FaHome,
       },
       "/report": {
@@ -136,7 +137,6 @@ const RoleBasedViews = {
       },
     },
   },
-
   healthofficer: {
     name: "Health Officer",
     routes: {
@@ -160,7 +160,6 @@ const RoleBasedViews = {
       },
     },
   },
-
   recordofficer: {
     name: "Record Officer",
     routes: {
@@ -186,7 +185,6 @@ const RoleBasedViews = {
       },
     },
   },
-
   cashier: {
     name: "Cashier",
     routes: {
