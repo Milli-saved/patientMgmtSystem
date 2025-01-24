@@ -186,11 +186,12 @@ const RoleBasedViews = {
         component: React.createElement(CashierDashboard),
         icons: FaHome,
       },
-      "/feedback": {
-        label: "Feedback",
-        component: React.createElement(CashierFeedback),
-        icons: FaUserDoctor,
-      }, "/settings": {
+      // "/feedback": {
+      //   label: "Feedback",
+      //   component: React.createElement(CashierFeedback),
+      //   icons: FaUserDoctor,
+      // },
+       "/settings": {
         label: "Settings",
         component: React.createElement(PhysicianSettings),
         icons: FaGear,

@@ -17,6 +17,8 @@ import axios from "axios";
 import { useEffect } from "react";
 import { apiUtility } from "../../components/repo/api";
 import { AuthContext } from "../../contexts/auth";
+import AdminTable from "../admin/AdminTable";
+import ExportTable from "../utils/ExportTable";
 
 const BillPayment = () => {
   const [patient, setData] = useState(null);
@@ -46,6 +48,7 @@ const BillPayment = () => {
 
   useEffect(() => {
     fetchData();
+    fetchBillData();
   }, []);
 
   const handleChange = (e) => {
@@ -84,12 +87,51 @@ const BillPayment = () => {
             Amount: "",
             Type: [],
           })
-          console.log('form data', formData);
-
+          // console.log('form data', formData);
+          fetchBillData();
         }
       }
     } catch (error) {
       setError("Unable to save bill data");
+    }
+  };
+
+  const columns = [
+    { label: "Patient ID", field: "_id" },
+    { label: "Full Name", field: "patientName" },
+    { label: "Phone Number", field: "patientPhone" },
+    { label: "Email", field: "patientEmail" },
+    { label: "Sub city", field: "patientSubCity" },
+    { label: "Woreda", field: "patientWoreda" },
+    { label: "House Number", field: "patientHouseNumber" },
+    { label: "Emergency Contact", field: "patientEmergencyContact" },
+    { label: "Bill Amount", field: "billAmount" },
+    { label: "Bill Status", field: "billStatus" },
+    { label: "Bill Type", field: "billType" },
+  ];
+
+  // const actions = [
+  //   {
+  //     label: "Assign",
+  //     color: "gray",
+  //     onClick: (row) => {
+  //       // console.log("Update clicked for:", row);
+  //       setSelectedPatient(row);
+  //       assignedFetch();
+  //       setAssignPatientModal(true);
+  //       { SnackBarShow("Assigned Successfully", false) }
+  //     },
+  //   },
+  // ];
+
+  const [data, setBillDate] = useState(null);
+  const fetchBillData = async () => {
+    try {
+      const response = await apiUtility.get("/bill/getAllBillByHealthCenter/" + user.healthCenterId);
+      if (response.status == true)
+        setBillDate(response.data);
+    } catch (err) {
+      setError(err.message);
     }
   };
 
@@ -174,8 +216,12 @@ const BillPayment = () => {
         </form>
       </Box>
       <Box>
+        <Typography className="p-3" variant="h6" fontWeight="bold">Bill Records</Typography>
+        <h1 className="m-5 text-3xl font-semibold text-gray-800">
+          <ExportTable data={data} fileName="Bill Statement" />
+        </h1>
         <Paper>
-              
+          <AdminTable data={data} columns={columns} />
         </Paper>
       </Box>
     </>
