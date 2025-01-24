@@ -137,17 +137,17 @@ import { apiUtility } from '../../components/repo/api';
 import { AuthContext } from '../../contexts/auth';
 
 const AssignPatientToDocModal = ({onClose, patientInfo }) => {
-  console.log('in assignPatientToDocModal', patientInfo);
+  // console.log('in assignPatientToDocModal', patientInfo);
   
   const patientName = patientInfo.fullName;
   const patientID = patientInfo.PatientID;
-console.log('in assignPatientToDocModal',patientName, patientID);
+// console.log('in assignPatientToDocModal',patientName, patientID);
   const [error, setError] = useState(null);
 
   const [doctors, setDoctors] = useState([]);
   const [selectedDoctor, setSelectedDoctor] = useState('');
   const [loading, setLoading] = useState(true);
-  const { token, user } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
 
   const loadDoctors = async () => {
     setLoading(true);
@@ -159,17 +159,19 @@ console.log('in assignPatientToDocModal',patientName, patientID);
   useEffect(() => {
     loadDoctors();
   }, []);
- 
+
   const formData = {
-    "patientId":patientID,
-    "physicianId": selectedDoctor
+    "patientId": patientID,
+    "physicianId": selectedDoctor,
+    "healthCenterId": user.healthCenterId,
   }
   const handleSubmit = async () => {
     const response = await apiUtility.post(`/patient/assignDoctor`, formData);
-      console.log('assign patient', response.status);
-      if (response.status == true) {
+    console.log('assign patient', response.status);
+    if (response.status == true) {
         setError(response.message);
         onClose();
+        
       } else {
         setError(response.message);
       }
