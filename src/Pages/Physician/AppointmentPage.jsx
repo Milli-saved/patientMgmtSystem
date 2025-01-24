@@ -168,7 +168,7 @@ const AppointmentPage = () => {
           </Button>
         </Box>
       </Container>
-      <Divider sx={{pt:5}}/>
+      <Divider sx={{ pt: 5 }} />
       <Container>
         <Box>
           <Box display="flex" justifyContent="start" my={3}>
