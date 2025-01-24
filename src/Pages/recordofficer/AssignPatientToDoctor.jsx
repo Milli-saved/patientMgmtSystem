@@ -42,7 +42,6 @@ const data = [
 
 const AssignPatientToDoctor = () => {
   const [assignPatientModal, setAssignPatientModal] = useState(false);
-
   const [selectedPatient, setSelectedPatient] = useState({});
   const { token, user } = useContext(AuthContext);
   const [data, setData] = useState(null);
@@ -54,7 +53,7 @@ const AssignPatientToDoctor = () => {
 
   const fetchData = async () => {
     try {
-      const response = await apiUtility.get("/patient/getAllPatientByHealth/" + user.healthCenterId);
+      const response = await apiUtility.get("/patient/getUnAssignedPatient/" + user.healthCenterId);
       if (response.status == true)
         setData(response.data);
       console.log('user: ', data);
@@ -65,6 +64,7 @@ const AssignPatientToDoctor = () => {
 
   useEffect(() => {
     fetchData();
+    assignedFetch();
   }, []);
 
   const columns = [
@@ -80,6 +80,7 @@ const AssignPatientToDoctor = () => {
     { label: "Emergency Contact", field: "EmergencyContact" },
     { label: "Email", field: "Email" },
   ];
+
   const actions = [
     {
       label: "Assign",
@@ -87,12 +88,20 @@ const AssignPatientToDoctor = () => {
       onClick: (row) => {
         console.log("Update clicked for:", row);
         setSelectedPatient(row);
+        assignedFetch();
         setAssignPatientModal(true);
-        // setUpdate(true);
-        // setError("");
       },
     },
   ];
+
+  const closeAssignModal = () => {
+    setAssignPatientModal(false);
+    setSelectedPatient({});
+    assignedFetch();
+    fetchData();
+  };
+
+  // For assign page
   const [unassignedresponse, setUnAssignResponse] = useState("");
 
   const action1 = [
@@ -102,21 +111,40 @@ const AssignPatientToDoctor = () => {
       onClick: async (row) => {
         console.log("un assigned clicked for:", row);
         try {
-          const response = await apiUtility.get("/patient/unAssignPatient/" + row.PatientID);
-          // if(response.status == true){
+          const response = await apiUtility.get("/patient/unAssignPatient/" + row.patientId);
           <AutohideSnackbar message={response.message} />
-          setUnAssignResponse(response.message);
+          setUnAssignResponse(response.message); assignedFetch();
+          fetchData();
         } catch (err) {
-          setUnAssignResponse("Unable to un assign patient");
+          setUnAssignResponse("Unable to un assign patient"); fetchData();
         }
       },
     },
   ];
-  const closeAssignModal = () => {
-    setAssignPatientModal(false);
-    setSelectedPatient({});
-  };
 
+  const assignColumns = [
+    { label: "Patient ID", field: "PatientID" },
+    { label: "Full Name", field: "patientName" },
+    { label: "Date Of Birth", field: "DateOfBirth" },
+    { label: "Gender", field: "Gender" },
+    { label: "City", field: "City" },
+    { label: "Phone Number", field: "phoneNumber" },
+    { label: "Physician Id", field: "physicianId" },
+  ];
+
+
+  const [assignData, setAssignData] = useState(null);
+  const assignedFetch = async () => {
+    try {
+      const response = await apiUtility.get("/patient/getAllAssignedPatient/" + user.healthCenterId);
+      if (response.status == true)
+        setAssignData(response.data);
+      // console.log('assigned data: ', data);
+    } catch (err) {
+      setError(err.message);
+    }
+  }
+  // end of assign one
   return (
     <>
       <div className="mx-10">
@@ -140,7 +168,7 @@ const AssignPatientToDoctor = () => {
           </h1>
           {unassignedresponse && unassignedresponse}
           <div>
-            <AdminTable data={data} columns={columns} actions={action1} />
+            <AdminTable data={assignData} columns={assignColumns} actions={action1} />
           </div>
         </div>
       </div>
@@ -150,7 +178,6 @@ const AssignPatientToDoctor = () => {
           patientInfo={selectedPatient}
         />
       )}
-
     </>
   );
 };
