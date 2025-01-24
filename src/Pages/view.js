@@ -55,6 +55,11 @@ const RoleBasedViews = {
         component: React.createElement(PasswordResetPage),
         icons: FaUser,
       },
+      "/feedback": {
+        label: "Feedback",
+        component: React.createElement(CashierFeedback),
+        icons: FaUserDoctor,
+      },
       "/settings": {
         label: "Settings",
         component: React.createElement(PhysicianSettings),
@@ -195,7 +200,7 @@ const RoleBasedViews = {
       //   component: React.createElement(CashierFeedback),
       //   icons: FaUserDoctor,
       // },
-       "/settings": {
+      "/settings": {
         label: "Settings",
         component: React.createElement(PhysicianSettings),
         icons: FaGear,
