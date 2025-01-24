@@ -7,6 +7,7 @@ import { apiUtility } from "../../components/repo/api";
 import { useEffect } from "react";
 import AdminTable from "../admin/AdminTable";
 import { Typography, Box, Grid, Container } from '@mui/material';
+import ExportTable from "../utils/ExportTable";
 
 const feedback = () => {
   const [data, setData] = useState(null);
@@ -53,6 +54,9 @@ const feedback = () => {
         <Box mb={5}>
           <Typography variant="h2" component="h2" fontSize="1.875rem" fontWeight="bold" color="text.primary" mb={2}>
             Feedback List
+          </Typography>
+          <Typography>
+            <ExportTable data={data} fileName="Feedback from patient" />
           </Typography>
           <Grid container spacing={3}>
             <Grid item xs={12}>
