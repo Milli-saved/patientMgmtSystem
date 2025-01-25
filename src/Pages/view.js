@@ -4,6 +4,7 @@ import {
   FaBookmark,
   FaHome,
   FaHospital,
+  FaStethoscope,
   FaUser,
 } from "react-icons/fa";
 import { FaGear, FaHospitalUser, FaUserDoctor } from "react-icons/fa6";
@@ -33,6 +34,7 @@ import PasswordResetPage from "./admin/PasswordResetPage";
 import AppointmentPage from "./Physician/AppointmentPage";
 import PrescriptionPage from "./Physician/PrescriptionPage";
 import DynamicReportPage from "./admin/DynamicReportPage";
+import AddParameter from "./admin/AddParameter";
 
 const RoleBasedViews = {
   admin: {
@@ -57,6 +59,11 @@ const RoleBasedViews = {
         label: "Reset Password",
         component: React.createElement(PasswordResetPage),
         icons: FaUser,
+      },
+      "/addpatameter":{
+        label: "Add Parameter",
+        component: React.createElement(AddParameter),
+        icons: FaStethoscope,
       },
       "/feedback": {
         label: "Feedback",
