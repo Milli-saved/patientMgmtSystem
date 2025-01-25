@@ -95,48 +95,48 @@ const AddParameter = () => {
         requireLowercase: true,
         requireNumber: true,
         requireSpecialChar: false,
-      });
-      const [error, setError] = useState("");
-      const [success, setSuccess] = useState("");
-    
-      useEffect(() => {
+    });
+    const [error, setError] = useState("");
+    const [success, setSuccess] = useState("");
+
+    useEffect(() => {
         fetchPolicy();
-      }, []);
-    
-      const fetchPolicy = async () => {
+    }, []);
+
+    const fetchPolicy = async () => {
         try {
-          const response = await apiUtility.get("/util/policy");
-          if (response.status) {
-            console.log('responses.',response.data);
-            
-            setPolicy(response.data);
-          }
+            const response = await apiUtility.get("/util/policy");
+            if (response.status) {
+                console.log('responses.', response.data);
+
+                setPolicy(response.data);
+            }
         } catch (err) {
-          setError("Failed to fetch policy.");
+            setError("Failed to fetch policy.");
         }
-      };
-    
-      const handleChange = (e) => {
+    };
+
+    const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
         setPolicy((prev) => ({
-          ...prev,
-          [name]: type === "checkbox" ? checked : value,
+            ...prev,
+            [name]: type === "checkbox" ? checked : value,
         }));
-      };
-    
-      const handleSubmitPassword = async (e) => {
+    };
+
+    const handleSubmitPassword = async (e) => {
         e.preventDefault();
         try {
-          const response = await apiUtility.post("/util/updatepolicy", policy);
-          if (response.status) {
-            setSuccess("Policy updated successfully.");
-          } else {
-            setError(response.message);
-          }
+            const response = await apiUtility.post("/util/updatepolicy", policy);
+            if (response.status) {
+                setSuccess("Policy updated successfully.");
+            } else {
+                setError(response.message);
+            }
         } catch (err) {
-          setError("Failed to update policy.");
+            setError("Failed to update policy.");
         }
-      };
+    };
 
     return (
         <Box>
@@ -147,108 +147,108 @@ const AddParameter = () => {
             <Box sx={{ p: 3 }}>
                 {tabIndex === 0 && (
                     <Box mx={5} my={3}>
-                    {/* <Typography variant="h6">Password Policy </Typography> */}
-                    <Typography variant="h4" fontWeight="bold" mb={3}>
-                      Password Policy Configuration
-                    </Typography>
-                    {error && <Typography color="error">{error}</Typography>}
-                    {success && <Typography color="success">{success}</Typography>}
-                    <form onSubmit={handleSubmitPassword}>
-                      <Grid container spacing={3}>
-                        {/* Minimum Length */}
-                        <Grid item xs={12} md={6}>
-                          <TextField
-                            fullWidth
-                            label="Minimum Length"
-                            name="minLength"
-                            type="number"
-                            value={policy.minLength}
-                            onChange={handleChange}
-                            required
-                          />
-                        </Grid>
-                        {/* Maximum Length */}
-                        <Grid item xs={12} md={6}>
-                          <TextField
-                            fullWidth
-                            label="Maximum Length"
-                            name="maxLength"
-                            type="number"
-                            value={policy.maxLength}
-                            onChange={handleChange}
-                            required
-                          />
-                        </Grid>
-                        {/* Require Uppercase */}
-                        <Grid item xs={12} md={6}>
-                          <FormControl fullWidth>
-                            <InputLabel id="require-uppercase-label">Require Uppercase</InputLabel>
-                            <Select
-                              labelId="require-uppercase-label"
-                              name="requireUppercase"
-                              value={policy.requireUppercase}
-                              onChange={handleChange}
-                            >
-                              <MenuItem value={true}>Yes</MenuItem>
-                              <MenuItem value={false}>No</MenuItem>
-                            </Select>
-                          </FormControl>
-                        </Grid>
-                        {/* Require Lowercase */}
-                        <Grid item xs={12} md={6}>
-                          <FormControl fullWidth>
-                            <InputLabel id="require-lowercase-label">Require Lowercase</InputLabel>
-                            <Select
-                              labelId="require-lowercase-label"
-                              name="requireLowercase"
-                              value={policy.requireLowercase}
-                              onChange={handleChange}
-                            >
-                              <MenuItem value={true}>Yes</MenuItem>
-                              <MenuItem value={false}>No</MenuItem>
-                            </Select>
-                          </FormControl>
-                        </Grid>
-                        {/* Require Numbers */}
-                        <Grid item xs={12} md={6}>
-                          <FormControl fullWidth>
-                            <InputLabel id="require-number-label">Require Numbers</InputLabel>
-                            <Select
-                              labelId="require-number-label"
-                              name="requireNumber"
-                              value={policy.requireNumber}
-                              onChange={handleChange}
-                            >
-                              <MenuItem value={true}>Yes</MenuItem>
-                              <MenuItem value={false}>No</MenuItem>
-                            </Select>
-                          </FormControl>
-                        </Grid>
-                        {/* Require Special Characters */}
-                        <Grid item xs={12} md={6}>
-                          <FormControl fullWidth>
-                            <InputLabel id="require-special-label">
-                              Require Special Characters
-                            </InputLabel>
-                            <Select
-                              labelId="require-special-label"
-                              name="requireSpecialChar"
-                              value={policy.requireSpecialChar}
-                              onChange={handleChange}
-                            >
-                              <MenuItem value={true}>Yes</MenuItem>
-                              <MenuItem value={false}>No</MenuItem>
-                            </Select>
-                          </FormControl>
-                        </Grid>
-                      </Grid>
-                      <Box mt={4} display="flex" justifyContent="flex-end">
-                        <Button variant="contained" color="primary" type="submit">
-                          Save Policy
-                        </Button>
-                      </Box>
-                    </form>
-                  </Box>
+                        {/* <Typography variant="h6">Password Policy </Typography> */}
+                        <Typography variant="h4" fontWeight="bold" mb={3}>
+                            Password Policy Configuration
+                        </Typography>
+                        {error && <Typography color="error">{error}</Typography>}
+                        {success && <Typography color="success">{success}</Typography>}
+                        <form onSubmit={handleSubmitPassword}>
+                            <Grid container spacing={3}>
+                                {/* Minimum Length */}
+                                <Grid item xs={12} md={6}>
+                                    <TextField
+                                        fullWidth
+                                        label="Minimum Length"
+                                        name="minLength"
+                                        type="number"
+                                        value={policy.minLength}
+                                        onChange={handleChange}
+                                        required
+                                    />
+                                </Grid>
+                                {/* Maximum Length */}
+                                <Grid item xs={12} md={6}>
+                                    <TextField
+                                        fullWidth
+                                        label="Maximum Length"
+                                        name="maxLength"
+                                        type="number"
+                                        value={policy.maxLength}
+                                        onChange={handleChange}
+                                        required
+                                    />
+                                </Grid>
+                                {/* Require Uppercase */}
+                                <Grid item xs={12} md={6}>
+                                    <FormControl fullWidth>
+                                        <InputLabel id="require-uppercase-label">Require Uppercase</InputLabel>
+                                        <Select
+                                            labelId="require-uppercase-label"
+                                            name="requireUppercase"
+                                            value={policy.requireUppercase}
+                                            onChange={handleChange}
+                                        >
+                                            <MenuItem value={true}>Yes</MenuItem>
+                                            <MenuItem value={false}>No</MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                </Grid>
+                                {/* Require Lowercase */}
+                                <Grid item xs={12} md={6}>
+                                    <FormControl fullWidth>
+                                        <InputLabel id="require-lowercase-label">Require Lowercase</InputLabel>
+                                        <Select
+                                            labelId="require-lowercase-label"
+                                            name="requireLowercase"
+                                            value={policy.requireLowercase}
+                                            onChange={handleChange}
+                                        >
+                                            <MenuItem value={true}>Yes</MenuItem>
+                                            <MenuItem value={false}>No</MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                </Grid>
+                                {/* Require Numbers */}
+                                <Grid item xs={12} md={6}>
+                                    <FormControl fullWidth>
+                                        <InputLabel id="require-number-label">Require Numbers</InputLabel>
+                                        <Select
+                                            labelId="require-number-label"
+                                            name="requireNumber"
+                                            value={policy.requireNumber}
+                                            onChange={handleChange}
+                                        >
+                                            <MenuItem value={true}>Yes</MenuItem>
+                                            <MenuItem value={false}>No</MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                </Grid>
+                                {/* Require Special Characters */}
+                                <Grid item xs={12} md={6}>
+                                    <FormControl fullWidth>
+                                        <InputLabel id="require-special-label">
+                                            Require Special Characters
+                                        </InputLabel>
+                                        <Select
+                                            labelId="require-special-label"
+                                            name="requireSpecialChar"
+                                            value={policy.requireSpecialChar}
+                                            onChange={handleChange}
+                                        >
+                                            <MenuItem value={true}>Yes</MenuItem>
+                                            <MenuItem value={false}>No</MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                </Grid>
+                            </Grid>
+                            <Box mt={4} display="flex" justifyContent="flex-end">
+                                <Button variant="contained" color="primary" type="submit">
+                                    Save Policy
+                                </Button>
+                            </Box>
+                        </form>
+                    </Box>
                 )}
                 {tabIndex === 1 && (
                     <Box>

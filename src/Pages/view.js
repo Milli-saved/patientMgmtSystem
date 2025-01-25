@@ -60,7 +60,7 @@ const RoleBasedViews = {
         component: React.createElement(PasswordResetPage),
         icons: FaUser,
       },
-      "/addpatameter":{
+      "/addpatameter": {
         label: "Add Parameter",
         component: React.createElement(AddParameter),
         icons: FaStethoscope,
@@ -217,6 +217,16 @@ const RoleBasedViews = {
       //   component: React.createElement(CashierFeedback),
       //   icons: FaUserDoctor,
       // },
+      "/settings": {
+        label: "Manage Profile",
+        component: React.createElement(PhysicianSettings),
+        icons: FaGear,
+      },
+    },
+  },
+  pharmacist: {
+    name: "Pharmacist",
+    routes: {
       "/settings": {
         label: "Manage Profile",
         component: React.createElement(PhysicianSettings),
