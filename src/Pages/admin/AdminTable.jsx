@@ -48,6 +48,7 @@ import { Button } from "@mui/material";
 // };
 
 const AdminTable = ({ data, columns, actions }) => {
+ 
   const rowsWithIds = data && data.map((row, index) => ({
     ...row,
     id: row._id || Math.round(), 

@@ -32,6 +32,7 @@ import CashierFeedback from "./cashier/feedback";
 import PasswordResetPage from "./admin/PasswordResetPage";
 import AppointmentPage from "./Physician/AppointmentPage";
 import PrescriptionPage from "./Physician/PrescriptionPage";
+import DynamicReportPage from "./admin/DynamicReportPage";
 
 const RoleBasedViews = {
   admin: {
@@ -61,6 +62,11 @@ const RoleBasedViews = {
         label: "Feedback",
         component: React.createElement(CashierFeedback),
         icons: FaUserDoctor,
+      },
+      "/dynamicreport": {
+        label: "Dynamic Report",
+        component: React.createElement(DynamicReportPage),
+        icons: FaBookmark,
       },
       "/settings": {
         label: "Manage Profile",
