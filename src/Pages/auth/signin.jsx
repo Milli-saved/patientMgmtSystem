@@ -185,6 +185,8 @@ import {
   TextField,
   Typography,
   CircularProgress,
+  Modal,
+  List,
 } from "@mui/material";
 
 const Signin = () => {
@@ -196,7 +198,7 @@ const Signin = () => {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-
+  const [open, setOpen] = useState(false);
   const changeHandler = (e) => {
     const { name, value } = e.target;
 
@@ -210,7 +212,7 @@ const Signin = () => {
     e.preventDefault();
     try {
       setLoading(true);
-      
+
       if (!credentials.userName || !credentials.password) {
         setError("Please enter username and password");
         return;
@@ -229,7 +231,7 @@ const Signin = () => {
       if (response.ok) {
         const result = await response.json();
         // console.log('JSON response',result);
-        
+
         window.localStorage.setItem("token", result.data.token);
 
         const roleBasedView = RoleBasedViews[result.data.role];
@@ -265,94 +267,125 @@ const Signin = () => {
       }
     } catch (error) {
       console.log('error', error);
-      
-      setError("Unable to connect to server.",error);
+
+      setError("Unable to connect to server.", error);
     } finally {
       setLoading(false);
     }
   };
 
+  const modalOpen = () => {
+    setOpen(true);
+  }
+  const modalClose = () => {
+    setOpen(false);
+  }
+
   return (
-    <Container maxWidth="sm">
-      <Paper
-        elevation={3}
-        sx={{
-          paddingTop: 6,
-          paddingBottom: 10,
-          paddingLeft: 5,
-          paddingRight: 5,
-          mt: 8,
-          borderRadius: 2,
-          textAlign: "center",
-        }}
-      >
-        <Typography variant="h4" gutterBottom sx={{ color: "primary.main" }}>
-          Login
-        </Typography>
-        <Typography variant="subtitle1" sx={{ color: "text.secondary", mb: 3 }}>
-          Welcome to the Patient Information Management System
-        </Typography>
-        <form onSubmit={submitHandler}>
-          <TextField
-            fullWidth
-            label="User Name"
-            name="userName"
-            variant="outlined"
-            onChange={changeHandler}
-            sx={{ mb: 3 }}
-          />
-          <TextField
-            fullWidth
-            label="Password"
-            name="password"
-            type="password"
-            variant="outlined"
-            onChange={changeHandler}
-            sx={{ mb: 3 }}
-          />
-          <Box
-            display="flex"
-            justifyContent="space-between"
-            alignItems="center"
-            sx={{ mb: 3 }}
-          >
-            <FormControlLabel 
-              control={<Checkbox />}
-              label="Keep me signed in"
+    <>
+      <Container maxWidth="sm">
+        <Paper
+          elevation={3}
+          sx={{
+            paddingTop: 6,
+            paddingBottom: 10,
+            paddingLeft: 5,
+            paddingRight: 5,
+            mt: 8,
+            borderRadius: 2,
+            textAlign: "center",
+          }}
+        >
+          <Typography variant="h4" gutterBottom sx={{ color: "primary.main" }}>
+            Login
+          </Typography>
+          <Typography variant="subtitle1" sx={{ color: "text.secondary", mb: 3 }}>
+            Welcome to the Patient Information Management System
+          </Typography>
+          <form onSubmit={submitHandler}>
+            <TextField
+              fullWidth
+              label="User Name"
+              name="userName"
+              variant="outlined"
+              onChange={changeHandler}
+              sx={{ mb: 3 }}
             />
-            <Typography
-              variant="body2"
-              sx={{ color: "warning.main", cursor: "pointer" }}
-              onClick={(e)=>navigate('/resetPassword')}
+            <TextField
+              fullWidth
+              label="Password"
+              name="password"
+              type="password"
+              variant="outlined"
+              onChange={changeHandler}
+              sx={{ mb: 3 }}
+            />
+            <Box
+              display="flex"
+              justifyContent="space-between"
+              alignItems="center"
+              sx={{ mb: 3 }}
             >
-              Forgot password?
-            </Typography>
-          </Box>
-          {error && (
-            <Typography
-              variant="body2"
-              color="error"
-              sx={{ textAlign: "center", mb: 2 }}
+              <FormControlLabel
+                control={<Checkbox />}
+                label="Keep me signed in"
+              />
+              <Typography
+                variant="body2"
+                sx={{ color: "warning.main", cursor: "pointer" }}
+                onClick={(e) => navigate('/resetPassword')}
+              >
+                Forgot password?
+              </Typography>
+            </Box>
+            {error && (
+              <Typography
+                variant="body2"
+                color="error"
+                sx={{ textAlign: "center", mb: 2 }}
+              >
+                {error}
+              </Typography>
+            )}
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              fullWidth
+              disabled={loading}
+              sx={{ py: 1.5 }}
             >
-              {error}
-            </Typography>
-          )}
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            fullWidth
-            disabled={loading}
-            sx={{ py: 1.5 }}
+              {loading ? <CircularProgress size={24} /> : "Login"}
+            </Button>
+          </form>
+          <Typography variant="body2" className="float-end" sx={{ mt: 3 }}
           >
-            {loading ? <CircularProgress size={24} /> : "Login"}
+            <Button onClick={modalOpen}>Need Help?</Button>
+          </Typography>
+        </Paper>
+      </Container>
+      <Modal open={open} onClose={modalOpen} 
+      sx={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', display: 'flex', 
+      justifyContent: 'center', alignItems: 'center' }}>
+        <Paper sx={{ padding: 5, borderRadius: 5, backgroundColor: 'white' }}>
+          <Typography variant="h5" fontWeight="bold" textAlign="center" mb={3}>
+            Unable to login to the system?, Follow those steps</Typography>
+          <Box>
+            <List>First click forgot password</List>
+            <List>Enter Your Username, then click send buttton. </List>
+            <List>One Time Password (OTP) will be sent to your phone number</List>
+            <List>Enter the OTP that you received, and click confirm button</List>
+            <List>New password will be send to you. Login with that.</List>
+          </Box>
+          <Box>
+            <p>Still have challange? Contact your administrator.</p>
+          </Box>
+          <Button variant="outlined" className="float-end" onClick={modalClose} sx={{ mt: 3 }}>
+            Understand
           </Button>
-        </form>
-        <Typography variant="body2" className="float-end" sx={{ mt: 3 }}>
-          Need help?
-        </Typography>
-      </Paper>
-    </Container>
+        </Paper>
+      </Modal>
+    </>
   );
 };
 

@@ -63,7 +63,7 @@ const RoleBasedViews = {
         icons: FaUserDoctor,
       },
       "/settings": {
-        label: "Settings",
+        label: "Manage Profile",
         component: React.createElement(PhysicianSettings),
         icons: FaGear,
       },
@@ -78,7 +78,7 @@ const RoleBasedViews = {
         icons: FaHome,
       },
       "/settings": {
-        label: "Settings",
+        label: "Manage Profile",
         component: React.createElement(PatientSettings),
         icons: FaGear,
       },
@@ -113,7 +113,7 @@ const RoleBasedViews = {
       //   icons: FaBookmark,
       // },
       "/settings": {
-        label: "Settings",
+        label: "Manage Profile",
         component: React.createElement(PhysicianSettings),
         icons: FaGear,
       },
@@ -133,11 +133,11 @@ const RoleBasedViews = {
         icons: FaBookmark,
       },
       "/settings": {
-        label: "Settings",
+        label: "Manage Profile",
         component: React.createElement(LabSettings),
         icons: FaGear,
       }, "/settings": {
-        label: "Settings",
+        label: "Manage Profile",
         component: React.createElement(PhysicianSettings),
         icons: FaGear,
       },
@@ -160,7 +160,7 @@ const RoleBasedViews = {
         component: React.createElement(CashierFeedback),
         icons: FaUserDoctor,
       }, "/settings": {
-        label: "Settings",
+        label: "Manage Profile",
         component: React.createElement(PhysicianSettings),
         icons: FaGear,
       },
@@ -185,7 +185,7 @@ const RoleBasedViews = {
       //   icons: FaArrowAltCircleDown,
       // },
       "/settings": {
-        label: "Settings",
+        label: "Manage Profile",
         component: React.createElement(PhysicianSettings),
         icons: FaGear,
       },
@@ -205,7 +205,7 @@ const RoleBasedViews = {
       //   icons: FaUserDoctor,
       // },
       "/settings": {
-        label: "Settings",
+        label: "Manage Profile",
         component: React.createElement(PhysicianSettings),
         icons: FaGear,
       },
