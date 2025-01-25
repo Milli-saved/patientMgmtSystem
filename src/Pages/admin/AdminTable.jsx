@@ -48,12 +48,20 @@ import { Button } from "@mui/material";
 // };
 
 const AdminTable = ({ data, columns, actions }) => {
- 
+  console.log('data', data);
+
+  if (data && data.length > 0 && data[0].DateOfBirth) {
+    data.map((date) => {
+      date.DateOfBirth = new Date(date.DateOfBirth).toLocaleDateString();
+    });
+    console.log('data.DateOfBirth', data.DateOfBirth);
+
+  }
   const rowsWithIds = data && data.map((row, index) => ({
     ...row,
-    id: row._id || Math.round(), 
+    id: row._id || Math.round(),
   }));
-  // console.log('rowsWithIds', rowsWithIds);
+// console.log('rowsWithIds', rowsWithIds);
   // console.log('actions', actions);
   // console.log('column', columns);
   
