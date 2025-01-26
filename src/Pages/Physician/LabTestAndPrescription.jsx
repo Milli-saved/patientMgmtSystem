@@ -236,59 +236,10 @@ const LabTestAndPrescription = () => {
       {/* Tabs for different sections */}
       <Box mx={5} my={3}>
         <Tabs value={value} onChange={handleTabChange} aria-label="patient information tabs">
-          <Tab label="Prescription" />
           <Tab label="Lab Test" />
         </Tabs>
-        {/* Prescription Tab */}
-        {value === 0 && (
-          <Box>
-            <Paper elevation={3} sx={{ padding: 4 }}>
-              <Typography variant="h5" fontWeight="bold" mb={3}>Prescription</Typography>
-              <Grid container spacing={3}>
-                <Grid item xs={12} md={6}>
-                  <TextField
-                    fullWidth
-                    label="Medication"
-                    value={prescriptionData.Medication}
-                    variant="outlined"
-                    onChange={(e) => handlePrescriptionChange("Medication", e.target.value)}
-                  />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <TextField
-                    fullWidth
-                    label="Dosage"
-                    value={prescriptionData.Dosage}
-                    variant="outlined"
-                    onChange={(e) => handlePrescriptionChange("Dosage", e.target.value)}
-                  />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <TextField
-                    fullWidth
-                    label="Duration"
-                    value={prescriptionData.Duration}
-                    variant="outlined"
-                    onChange={(e) => handlePrescriptionChange("Duration", e.target.value)}
-                  />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <TextField
-                    fullWidth
-                    label="Instructions"
-                    value={prescriptionData.Instructions}
-                    variant="outlined"
-                    onChange={(e) => handlePrescriptionChange("Instructions", e.target.value)}
-                  />
-                </Grid>
-              </Grid>
-              <Button sx={{ mt: 3 }} variant="contained" onClick={handlePrescriptionSubmit}>Create Prescription</Button>
-            </Paper>
-          </Box>
-        )}
-
         {/* Lab Test Tab */}
-        {value === 1 && (
+        {value === 0 && (
           <Box>
             <Paper elevation={3} sx={{ padding: 4 }}>
               <Typography variant="h5" fontWeight="bold" mb={3}>Lab Test</Typography>
