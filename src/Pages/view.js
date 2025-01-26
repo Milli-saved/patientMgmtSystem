@@ -35,6 +35,7 @@ import AppointmentPage from "./Physician/AppointmentPage";
 import PrescriptionPage from "./Physician/PrescriptionPage";
 import DynamicReportPage from "./admin/DynamicReportPage";
 import AddParameter from "./admin/AddParameter";
+import LabTest from "./Lab/LabHome";
 
 const RoleBasedViews = {
   admin: {
@@ -133,22 +134,13 @@ const RoleBasedViews = {
     },
   },
   labtechnician: {
-    name: "Lab",
+    name: "Lab Technician",
     routes: {
       "/dashboard": {
-        label: "Lab Test & Prescriptions",
-        component: React.createElement(LabTestAndPrescription),
+        label: "Lab Test",
+        // component: React.createElement(LabTestAndPrescription),
+        component:React.createElement(LabTest),
         icons: FaHome,
-      },
-      "/report": {
-        label: "Report",
-        component: React.createElement(LabReport),
-        icons: FaBookmark,
-      },
-      "/settings": {
-        label: "Manage Profile",
-        component: React.createElement(LabSettings),
-        icons: FaGear,
       }, "/settings": {
         label: "Manage Profile",
         component: React.createElement(PhysicianSettings),
