@@ -190,7 +190,7 @@ const PrescriptionPage = () => {
             <Container>
                 <Box>
                     <Box display="flex" justifyContent="start" my={3}>
-                        <Typography variant="h6">Appointments</Typography>
+                        <Typography variant="h6">Prescription</Typography>
                     </Box>
                     <button className="py-3 text-white">
                         <FaDownload className="mr-2" />
