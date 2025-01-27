@@ -4,7 +4,9 @@ import {
   FaBookmark,
   FaHome,
   FaHospital,
+  FaMoneyBill,
   FaStethoscope,
+  FaTablets,
   FaUser,
 } from "react-icons/fa";
 import { FaGear, FaHospitalUser, FaUserDoctor } from "react-icons/fa6";
@@ -37,6 +39,9 @@ import DynamicReportPage from "./admin/DynamicReportPage";
 import AddParameter from "./admin/AddParameter";
 import LabTest from "./Lab/LabHome";
 import PatientActivation from "./HealthOfficer/PatientActivation";
+import LabTestRequest from "./Physician/LabTestRequest";
+import FinancialReport from "./cashier/FinancialReport";
+import PharmacistPrescriptionManagement from "./pharmacist/PharmacistPrescriptionManagement";
 
 const RoleBasedViews = {
   admin: {
@@ -166,6 +171,11 @@ const RoleBasedViews = {
         label: "Activate Patient",
         component: React.createElement(PatientActivation),
         icons: FaUser,
+      },
+      "/labtestrequest": {
+        label: "lab Test Request",
+        component: React.createElement(LabTestRequest),
+        icons: FaTablets,
       }
       , "/feedback": {
         label: "Feedback",
@@ -211,11 +221,11 @@ const RoleBasedViews = {
         component: React.createElement(CashierDashboard),
         icons: FaHome,
       },
-      // "/feedback": {
-      //   label: "Feedback",
-      //   component: React.createElement(CashierFeedback),
-      //   icons: FaUserDoctor,
-      // },
+      "/finaicialreport": {
+        label: "Financial Report",
+        component: React.createElement(FinancialReport),
+        icons: FaMoneyBill,
+      },
       "/settings": {
         label: "Manage Profile",
         component: React.createElement(PhysicianSettings),
@@ -226,6 +236,11 @@ const RoleBasedViews = {
   pharmacist: {
     name: "Pharmacist",
     routes: {
+      "/dashboard": {
+        label: "Prescription",
+        component: React.createElement(PharmacistPrescriptionManagement),
+        icons: FaHome,
+      },
       "/settings": {
         label: "Manage Profile",
         component: React.createElement(PhysicianSettings),
