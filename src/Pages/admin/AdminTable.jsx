@@ -72,7 +72,7 @@ const AdminTable = ({ data, columns, actions }) => {
           {
             field: "actions",
             headerName: "Actions",
-            width:"150",
+            width:"250",
             renderCell: (params) => (
               <div style={{ display: "block", gap: "0px" }}>
                 {actions.map((action, index) => (
