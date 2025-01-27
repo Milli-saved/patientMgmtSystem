@@ -10,6 +10,7 @@ import {
   Button,
   Grid,
   Paper,
+  Modal,
 } from "@mui/material";
 import { apiUtility } from "../../components/repo/api";
 import { AuthContext } from "../../contexts/auth";
@@ -97,8 +98,71 @@ const PatientActivation = () => {
     { label: "Phone Number", field: "phoneNumber" },
     { label: "Emergency Contact", field: "EmergencyContact" },
     { label: "Email", field: "Email" },
-  ]; 
+  ];
 
+  const [updateDate, setUpdateDate] = useState(null);
+  const [update, setUpdate] = useState(false);
+  const [newpassword, setNewPassword] = useState(null);
+
+  const actions = [
+    {
+      label: "Reset Password",
+      color: "green",
+      onClick: (row) => {
+        console.log("reset clicked for:", row.PatientID);
+        setUpdateDate(row.PatientID);
+        setUpdate(true);
+        setError("");
+      },
+    },
+    {
+      label: "Deactivate",
+      color: "red",
+      onClick: async (row) => {
+        try {
+          const response = await apiUtility.get("/patient/deactivate/" + row.PatientID);
+          console.log('deactivate response; ', response);
+          if (response.status == true) {
+            setSelectedPatient("");
+            fetchPatients();
+            fetchActivePatients();
+          } else {
+            setError(response.message);
+          }
+        } catch (err) {
+          setError(err.message);
+        }
+      },
+    },
+  ];
+  const onclose = () => {
+    setUpdate(false);
+  }
+  const handleReset = async (e) => {
+    e.preventDefault();
+    if (!updateDate || !newpassword) {
+      alert("Please select a patient and enter a password");
+      return;
+    }
+    try {
+      const response = await apiUtility.post("/patient/resetPassword", {
+        userName: updateDate,
+        password: newpassword,
+      });
+      if (response.status) {
+        alert("Patient activated successfully");
+        setPassword("");
+        setSelectedPatient("");
+        fetchPatients();
+        fetchActivePatients();
+        setUpdate(false);
+      } else {
+        setError(response.message || "Failed to activate patient");
+      }
+    } catch (err) {
+      setError("Unable to activate patient");
+    }
+  };
   return (
     <>
       <Box mx={5} my={3}>
@@ -152,11 +216,47 @@ const PatientActivation = () => {
         )}
       </Box>
       <Box>
-        <ExportTable data={activePatients} fileName="Active Patient"/>
+        <ExportTable data={activePatients} fileName="Active Patient" />
       </Box>
       <Box>
-        <AdminTable data={activePatients && activePatients} columns={columns} />
+        <AdminTable data={activePatients && activePatients} columns={columns} actions={actions} />
       </Box>
+      {update &&
+        <Modal open={update} onClose={onclose} aria-labelledby="add-health-center-title"
+          sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <Box sx={{
+            width: 400,
+            bgcolor: "background.paper",
+            borderRadius: 2,
+            boxShadow: 24,
+            p: 4,
+          }}>
+            <form onSubmit={handleReset}>
+              <Grid container spacing={3}>
+                <Grid item xs={12} md={12}>
+                  <TextField
+                    fullWidth
+                    label="New Password"
+                    type="newpassword"
+                    value={newpassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                  />
+                </Grid>
+              </Grid>
+              <Box mt={4} p={2} display="flex" justifyContent="flex-end">
+                <Button variant="contained" color="primary" type="submit">
+                  Reset password
+                </Button>
+                <Button className="p-2"
+                  onClick={onclose}
+                  variant="outlined"
+                >
+                  Cancel
+                </Button>
+              </Box>
+            </form>
+          </Box>
+        </Modal>}
     </>
   );
 };
