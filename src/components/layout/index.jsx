@@ -67,6 +67,7 @@ function AuthenticatedRoutes() {
       <Route path="/prescription" element={<ProtectedRoute/>} />
       <Route path="/dynamicreport" element={<ProtectedRoute/>} />
       <Route path="/addpatameter" element={<ProtectedRoute/>} />
+      <Route path="/activatepatient" element={<ProtectedRoute/>} />
     </Routes>
   );
 }
