@@ -36,6 +36,7 @@ import PrescriptionPage from "./Physician/PrescriptionPage";
 import DynamicReportPage from "./admin/DynamicReportPage";
 import AddParameter from "./admin/AddParameter";
 import LabTest from "./Lab/LabHome";
+import PatientActivation from "./HealthOfficer/PatientActivation";
 
 const RoleBasedViews = {
   admin: {
@@ -139,7 +140,7 @@ const RoleBasedViews = {
       "/dashboard": {
         label: "Lab Test",
         // component: React.createElement(LabTestAndPrescription),
-        component:React.createElement(LabTest),
+        component: React.createElement(LabTest),
         icons: FaHome,
       }, "/settings": {
         label: "Manage Profile",
@@ -160,7 +161,13 @@ const RoleBasedViews = {
         label: "Manage Patients",
         component: React.createElement(ManagePatients),
         icons: FaHospitalUser,
-      }, "/feedback": {
+      },
+      "/activatepatient": {
+        label: "Activate Patient",
+        component: React.createElement(PatientActivation),
+        icons: FaUser,
+      }
+      , "/feedback": {
         label: "Feedback",
         component: React.createElement(CashierFeedback),
         icons: FaUserDoctor,
