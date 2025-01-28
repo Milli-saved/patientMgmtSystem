@@ -71,6 +71,7 @@ function AuthenticatedRoutes() {
       <Route path="/labtestrequest" element={<ProtectedRoute/>} />
       <Route path="/finaicialreport" element={<ProtectedRoute/>} />
       <Route path="/labreport" element={<ProtectedRoute/>} />
+      <Route path="/horeport" element={<ProtectedRoute/>} />
     </Routes>
   );
 }

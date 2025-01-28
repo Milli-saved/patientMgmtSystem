@@ -42,6 +42,7 @@ import PatientActivation from "./HealthOfficer/PatientActivation";
 import LabTestRequest from "./Physician/LabTestRequest";
 import FinancialReport from "./cashier/FinancialReport";
 import PharmacistPrescriptionManagement from "./pharmacist/PharmacistPrescriptionManagement";
+import HODynamicReportPage from "./HealthOfficer/HODynamicReportPage";
 
 const RoleBasedViews = {
   admin: {
@@ -176,11 +177,18 @@ const RoleBasedViews = {
         label: "Activate Patient",
         component: React.createElement(PatientActivation),
         icons: FaUser,
-      }      , "/feedback": {
+      }
+      , "/feedback": {
         label: "Feedback",
         component: React.createElement(CashierFeedback),
         icons: FaUserDoctor,
-      }, "/settings": {
+      },
+      "/horeport":{
+        label: "Report",
+        component: React.createElement(HODynamicReportPage),
+        icons: FaHome,
+      },
+       "/settings": {
         label: "Manage Profile",
         component: React.createElement(PhysicianSettings),
         icons: FaGear,
