@@ -126,12 +126,12 @@ const RoleBasedViews = {
         label: "Prescription",
         component: React.createElement(PrescriptionPage),
         icons: FaHome,
+      },     
+      "/labtestrequest": {
+        label: "lab Test Request",
+        component: React.createElement(LabTestRequest),
+        icons: FaTablets,
       },
-      // "/report": {
-      //   label: "Reports",
-      //   // component:
-      //   icons: FaBookmark,
-      // },
       "/settings": {
         label: "Manage Profile",
         component: React.createElement(PhysicianSettings),
@@ -171,13 +171,7 @@ const RoleBasedViews = {
         label: "Activate Patient",
         component: React.createElement(PatientActivation),
         icons: FaUser,
-      },
-      "/labtestrequest": {
-        label: "lab Test Request",
-        component: React.createElement(LabTestRequest),
-        icons: FaTablets,
-      }
-      , "/feedback": {
+      }      , "/feedback": {
         label: "Feedback",
         component: React.createElement(CashierFeedback),
         icons: FaUserDoctor,
