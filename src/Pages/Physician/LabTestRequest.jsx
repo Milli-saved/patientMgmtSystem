@@ -289,6 +289,8 @@ const LabTestRequest = () => {
       if (pending.status) setPendingLabTests(pending.data);
       if (active.status) setActiveLabTests(active.data);
     } catch (err) {
+      console.log('errors', err);
+      
       setError("Unable to fetch lab tests");
     }
   };
