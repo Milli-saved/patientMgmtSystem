@@ -10,130 +10,115 @@ import {
   Button,
   Grid,
   Paper,
-  Checkbox,
-  ListItemText,
   Divider,
 } from "@mui/material";
 import { apiUtility } from "../../components/repo/api";
 import { AuthContext } from "../../contexts/auth";
 import AdminTable from "../admin/AdminTable";
-import ExportTable from "../utils/ExportTable";
 
 const LabTest = () => {
   const [patients, setPatients] = useState([]);
-  const [typeList, setTypeList] = useState([]);
+  const [labTests, setLabTests] = useState([]);
+  const [data, setLabData] = useState([]);
   const [selectedPatient, setSelectedPatient] = useState("");
-  const [selectedType, setSelectedType] = useState("");
-  const [formData, setFormData] = useState({
-    PatientID: "",
-    CreatedBy: "",
-    Type: "",
-    Results: "",
-    Notes: "",
-  });
-  const [labTestData, setLabTestData] = useState([]);
   const [error, setError] = useState("");
   const { user } = useContext(AuthContext);
+  const [notes, setNotes] = useState(""); // Additional notes for the lab test
+  const [result, setResult] = useState(""); // Result of the lab test
 
   useEffect(() => {
     fetchPatients();
-    fetchTypes();
-    fetchLabTestData();
+    fetchData();
   }, []);
 
   const fetchPatients = async () => {
     try {
-      const response = await apiUtility.get(`/patient/getAllAssignPatient/${user.userName}`);
+      const response = await apiUtility.get(`/labtest/getLabTestRequestLB`);
       if (response.status) setPatients(response.data);
     } catch (err) {
       setError("Unable to fetch patients");
     }
   };
 
-  const fetchTypes = async () => {
+  const fetchPatientLabTests = async (testId) => {
     try {
-      const response = await apiUtility.get("/billService/getAll");
-      if (response.status) setTypeList(response.data);
+      const response = await apiUtility.get(`/labtest/getLabTest/${testId}`);
+      console.log('pendingsssssss', response);
+      if (response.status) setLabTests(response.data);
     } catch (err) {
-      setError("Unable to fetch lab test types");
-    }
-  };
-
-  const fetchLabTestData = async () => {
-    try {
-      const response = await apiUtility.get(`/labtest/getAllLabTest`);
-      if (response.status) setLabTestData(response.data);
-    } catch (err) {
-      setError("Unable to fetch lab test data");
+      setError("Unable to fetch lab tests for the selected patient");
     }
   };
 
   const handlePatientChange = (e) => {
-    setSelectedPatient(e.target.value);
-    setFormData((prev) => ({
-      ...prev,
-      PatientID: e.target.value,
-      CreatedBy: user.userName,
-    }));
+    const testId = e.target.value;
+    setSelectedPatient(testId);
+    fetchPatientLabTests(testId);
+
   };
 
-  const handleTypeChange = (e) => {
-    setSelectedType(e.target.value);
-    setFormData((prev) => ({
-      ...prev,
-      Type: e.target.value,
-    }));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    console.log('reach heree..... in lab test..');
-    
-    if (!formData.PatientID || !formData.Type) {
-      setError("Please select both patient and a lab test type");
-      return;
-    }
+  const handleSubmit = async () => {
     try {
-      const response = await apiUtility.post("/labtest/createLabTest", {
-        ...formData,
-        CreatedAt: new Date().toISOString(),
-      });
-      console.log('response from lab test', response);
-      
-      if (response.status) {
-        setError("Lab test created successfully");
-        setFormData({
-          PatientID: "",
-          CreatedBy: user.userName,
-          Type: "",
-          Results: "",
-          Notes: "",
-        });
-        setSelectedPatient("");
-        setSelectedType("");
-        fetchLabTestData();
+      const postData = {
+        Notes: notes,
+        Results: result,
+        CreatedBy: user.userName,
+        status: "Completed"
+      }
+      const requests = await apiUtility.post(`/labtest/createLabTest/${selectedPatient}`, postData);
+      console.log('requests', requests);
+
+      if (requests.status) {
+        setError("Lab tests updated successfully");
+        fetchPatientLabTests();
+        fetchPatients();
+        setNotes("");
+        setResult("");
+        setLabTests([]);
+        fetchData();
       } else {
-        setError(response.message);
+        setError("Unable to update lab tests");
       }
     } catch (err) {
-      setError("Unable to create lab test");
+      setError("Unable to update lab tests");
     }
   };
 
   const columns = [
-    { label: "Patient ID", field: "patientId" },
-    { label: "Patient Name", field: "patientName" },
-    { label: "DateOfBirth", field: "DateOfBirth" },
+    { label: "Patient ID", field: "_id" },
+    { label: "lab Tests", field: "Type" },
+    { label: "Record ID", field: "TestID" },
+    { label: "Full Name", field: "patientName" },
+    { label: "Date Of Birth", field: "DateOfBirth" },
     { label: "Gender", field: "Gender" },
     { label: "City", field: "City" },
-    { label: "subCity", field: "subCity" },
-    { label: "Woreda", field: "Woreda" },
-    { label: "EmergencyContact", field: "EmergencyContact" },
-    { label: "TestID", field: "TestID" },
-    { label: "Type", field: "Type" },
-    { label: "Results", field: "Results" },
-    { label: "Notes", field: "Notes" },
+    { label: "subCity", field: "patientSubCity" },
+    { label: "Woreda", field: "patientWoreda" },
+    { label: "House Number", field: "patientHouseNumber" },
+    { label: "Emergency Contact", field: "patientEmergencyContact" },
+    { label: "Email", field: "patientEmail" },
+    { label: "Phone Number", field: "patientPhone" },
+    { label: "Status", field: "status" },
+    { label: "Test ID", field: "TestID" },
   ];
+
+  const handleNotesChange = (e) => {
+    setNotes(e.target.value);
+    setError("");
+  };
+  const handleResultChange = (e) => {
+    setResult(e.target.value);
+    setError("");
+  };
+
+  const fetchData = async () => {
+    try {
+      const response = await apiUtility.get(`/labtest/getLabTestRequestApproved/${user.userName}`);
+      if (response.status) setLabData(response.data);
+    } catch (err) {
+      setError("Unable to fetch lab tests for the selected patient");
+    }
+  }
 
   return (
     <>
@@ -141,85 +126,70 @@ const LabTest = () => {
         <Typography variant="h4" fontWeight="bold" mb={3}>
           Lab Test Management
         </Typography>
-        <Box display="flex" justifyContent="end" mx={5} my={3}>
-          <Box maxWidth="400">
-            <FormControl sx={{ width: 300 }}>
-              <InputLabel id="select-patient-label">Select Patient</InputLabel>
-              <Select
-                labelId="select-patient-label"
-                value={selectedPatient}
-                onChange={handlePatientChange}
-                label="Select Patient"
-              >
-                {patients.map((patient) => (
-                  <MenuItem key={patient.patientId} value={patient.patientId}>
-                    {patient.patientName}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Box>
+        <Box display="flex" justifyContent="start" mx={5} my={3}>
+          <FormControl sx={{ width: 300 }}>
+            <InputLabel id="select-patient-label">Select Patient</InputLabel>
+            <Select
+              labelId="select-patient-label"
+              value={selectedPatient}
+              onChange={handlePatientChange}
+              label="Select Patient"
+            >
+              {patients.map((patient) => (
+                <MenuItem key={patient.TestID} value={patient.TestID}>
+                  {patient.patientName}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
         </Box>
-        <form onSubmit={handleSubmit}>
-          <Grid container spacing={3}>
-            <Grid item xs={12} md={6}>
-              <FormControl fullWidth>
-                <InputLabel id="select-type-label">Select Test Type</InputLabel>
-                <Select
-                  labelId="select-type-label"
-                  value={selectedType}
-                  onChange={handleTypeChange}
-                  label="Select Test Type"
-                >
-                  {typeList.map((type) => (
-                    <MenuItem key={type.typeId} value={type.typeId}>
-                      {type.typeName}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <TextField
-                fullWidth
-                label="Results"
-                name="Results"
-                value={formData.Results}
-                onChange={(e) =>
-                  setFormData((prev) => ({ ...prev, Results: e.target.value }))
-                }
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                label="Notes"
-                name="Notes"
-                multiline
-                rows={4}
-                value={formData.Notes}
-                onChange={(e) =>
-                  setFormData((prev) => ({ ...prev, Notes: e.target.value }))
-                }
-              />
-            </Grid>
-          </Grid>
-          <Box mt={4} display="flex" justifyContent="flex-end">
-            <Button variant="contained" color="primary" type="submit">
-              Save Lab Test
-            </Button>
-          </Box>
-        </form>
+        <Divider />
+        <Box my={3}>
+          <Paper>
+            <Typography variant="h5" fontWeight="bold" mb={3} p={3}>Lab Tests</Typography>
+            {labTests.length > 0 ? (
+              <>
+                <AdminTable data={labTests} columns={columns} />
+              </>
+            ) : (
+              <Typography className="text-center p-5">No Lab test found</Typography>
+            )}
+          </Paper>
+        </Box>
+        <Box>
+          {error && error}
+        </Box>
+        {/* Additional Notes */}
+        <Grid item xs={12} sx={{ pb: 4 }}>
+          <TextField
+            fullWidth
+            label="Notes"
+            multiline
+            rows={4}
+            value={notes}
+            onChange={handleNotesChange}
+          />
+        </Grid>
+        {/* Additional Notes */}
+        <Grid item xs={12}>
+          <TextField
+            fullWidth
+            label="Result"
+            multiline
+            rows={4}
+            value={result}
+            onChange={handleResultChange}
+          />
+        </Grid>
+        <Box mt={4} display="flex" justifyContent="flex-end">
+          <Button variant="contained" color="primary" onClick={handleSubmit}>
+            Save Lab Tests
+          </Button>
+        </Box>
       </Box>
-      <Divider />
-      <Box>
-        <Typography className="p-3" variant="h6" fontWeight="bold">
-          Lab Test Records
-        </Typography>
-        <ExportTable data={labTestData} fileName="Lab Test Records" />
-        <Paper>
-          <AdminTable data={labTestData} columns={columns} />
-        </Paper>
+      <Box sx={{ p: 3 }}>
+        <Typography variant="h5" fontWeight="bold" mb={3}> Updated Lab Test</Typography>
+        <AdminTable data={data} columns={columns} />
       </Box>
     </>
   );
