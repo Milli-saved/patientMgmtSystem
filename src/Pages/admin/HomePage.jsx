@@ -41,16 +41,15 @@ const HomePage = () => {
           </div>
           <p className="text-gray-600 mt-4">
             This platform is designed to help you manage patient information
-            quickly and securely. You can access and update patient details,
-            schedule appointments, and review medical histories with ease.
+            quickly and securely. 
             Everything you need is in one place to streamline your workflow and
             improve patient care. Let’s get started!
           </p>
-          <div className="mt-6 flex justify-end ">
+          {/* <div className="mt-6 flex justify-end ">
             <button className="bg-blue-600 text-white py-2 outline px-4 rounded-md hover:bg-blue-700">
               View detail
             </button>
-          </div>
+          </div> */}
         </div>
       </div>
       <section className="mx-20 mb-20">
