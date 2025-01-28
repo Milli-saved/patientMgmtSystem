@@ -285,11 +285,15 @@ const LabTestRequest = () => {
       const response = await apiUtility.get("/billService/getAll");
       const pending = await apiUtility.get("/labtest/getLabTestRequest/" + user.userName);
       const active = await apiUtility.get("/labtest/getLabTestRequestApproved/" + user.userName);
+      console.log('response', response, pending, active);
+      
       if (response.status) setLabTests(response.data);
       if (pending.status) setPendingLabTests(pending.data);
       if (active.status) setActiveLabTests(active.data);
     } catch (err) {
-      setError("Unable to fetch lab tests");
+      console.log('errors', err);
+      
+      setError(" ");
     }
   };
 
