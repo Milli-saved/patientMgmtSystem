@@ -1,37 +1,54 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Table from "../../components/Table";
+import { Box, FormControl, InputLabel, MenuItem, Select, Tab, Tabs, Typography } from "@mui/material";
+import AdminTable from "../admin/AdminTable";
+import { apiUtility } from "../../components/repo/api";
+import ExportTable from "../utils/ExportTable";
+import { AuthContext } from "../../contexts/auth";
 
-const data = [
-  {
-    name: "Cherry Delight",
-    id: "#KP267400",
-    branch: "Sheger",
-    email: "abdutolla@gmail.com",
-    type: "Super Admin",
-    status: "Pending",
-    color: "bg-yellow-100 text-yellow-700",
-  },
-  {
-    name: "Kiwi",
-    id: "#TL681535",
-    branch: "Sheger",
-    email: "abdutolla@gmail.com",
-    type: "Admin",
-    status: "Active",
-    color: "bg-green-100 text-green-700",
-  },
-  {
-    name: "Mango Magic",
-    id: "#GB651535",
-    branch: "Sheger",
-    email: "abdutolla@gmail.com",
-    type: "Super Admin",
-    status: "Inactive",
-    color: "bg-red-100 text-red-700",
-  },
-];
 
 const LabReport = () => {
+
+  const [pendinglabTests, setPendingLabTests] = useState([]);
+  const [activelabTests, setActiveLabTests] = useState([]);
+  const [tabIndex, setTabIndex] = useState(0);
+  const { user } = useContext(AuthContext);
+
+  const handleTabChange = (event, newValue) => {
+    setTabIndex(newValue);
+  };
+  useEffect(() => {
+    fetchLabTests();
+  }, []);
+
+  const fetchLabTests = async () => {
+    try {
+      const pending = await apiUtility.get("/labtest/getLabTestRequest/" + user.userName);
+      const active = await apiUtility.get("/labtest/getLabTestRequestApproved/" + user.userName);
+
+      if (pending.status) setPendingLabTests(pending.data);
+      if (active.status) setActiveLabTests(active.data);
+    } catch (err) {
+      setError("Unable to fetch lab tests");
+    }
+  };
+
+  const columns = [
+    { label: "Patient ID", field: "_id" },
+    { label: "Record ID", field: "TestID" },
+    { label: "Full Name", field: "patientName" },
+    { label: "Date Of Birth", field: "DateOfBirth" },
+    { label: "Gender", field: "Gender" },
+    { label: "City", field: "City" },
+    { label: "subCity", field: "patientSubCity" },
+    { label: "Woreda", field: "patientWoreda" },
+    { label: "House Number", field: "patientHouseNumber" },
+    { label: "Emergency Contact", field: "patientEmergencyContact" },
+    { label: "Email", field: "patientEmail" },
+    { label: "Phone Number", field: "patientPhone" },
+    { label: "Status", field: "status" },
+  ];
+
   return (
     <>
       <div>
@@ -39,10 +56,26 @@ const LabReport = () => {
           Lab Reports
         </h1>
       </div>
-      <div>
-        {/* <h1>List of patients</h1> */}
-        <Table data={data} />
-      </div>
+      <Tabs value={tabIndex} onChange={handleTabChange}>
+        <Tab label="Pending Lab Test Requests" />
+        <Tab label="Updated Lab Test Requests" />
+      </Tabs>
+
+      {tabIndex === 0 && (
+        <Box sx={{ m: "16", p: 5 }}>
+          {/* <Typography variant="h5">Pending Lab Test Requests</Typography> */}
+          <ExportTable data={[]} fileName="Pending_Lab_Test_Requests" />
+          <AdminTable data={pendinglabTests} columns={columns} />
+        </Box>
+      )}
+
+      {tabIndex === 1 && (
+        <Box sx={{ m: "16", p: 5 }}>
+          {/* <Typography variant="h5">Updated Lab Test Requests</Typography> */}
+          <ExportTable data={[]} fileName="Updated_Lab_Test_Requests" />
+          <AdminTable data={activelabTests} columns={columns} />
+        </Box>
+      )}
     </>
   );
 };

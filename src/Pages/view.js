@@ -144,10 +144,15 @@ const RoleBasedViews = {
     routes: {
       "/dashboard": {
         label: "Lab Test",
-        // component: React.createElement(LabTestAndPrescription),
         component: React.createElement(LabTest),
         icons: FaHome,
-      }, "/settings": {
+      },
+      "/labreport": {
+        label: "Lab Report",
+        component: React.createElement(LabReport),
+        icons: FaHome,
+      },
+       "/settings": {
         label: "Manage Profile",
         component: React.createElement(PhysicianSettings),
         icons: FaGear,
