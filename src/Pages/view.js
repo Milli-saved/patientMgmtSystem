@@ -43,6 +43,7 @@ import LabTestRequest from "./Physician/LabTestRequest";
 import FinancialReport from "./cashier/FinancialReport";
 import PharmacistPrescriptionManagement from "./pharmacist/PharmacistPrescriptionManagement";
 import HODynamicReportPage from "./HealthOfficer/HODynamicReportPage";
+import AppointmentApprovePage from "./HealthOfficer/AppointmentApprovePage";
 
 const RoleBasedViews = {
   admin: {
@@ -186,6 +187,11 @@ const RoleBasedViews = {
       "/horeport":{
         label: "Report",
         component: React.createElement(HODynamicReportPage),
+        icons: FaHome,
+      },
+      "/approveappointment": {
+        label: "Approve Appointment",
+        component: React.createElement(AppointmentApprovePage),
         icons: FaHome,
       },
        "/settings": {
