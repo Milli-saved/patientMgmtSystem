@@ -475,8 +475,8 @@ const AddNewPatient = ({ onClose }) => {
               defaultValue=""
               value={patientInfo.Gender}
               onChange={changeHandler}
+              label="Select Gender"
             >
-              <MenuItem >Select Gender</MenuItem>
               <MenuItem value="Male">Male</MenuItem>
               <MenuItem value="Female">Female</MenuItem>
             </Select>
