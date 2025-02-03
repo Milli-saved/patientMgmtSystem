@@ -44,6 +44,7 @@ import FinancialReport from "./cashier/FinancialReport";
 import PharmacistPrescriptionManagement from "./pharmacist/PharmacistPrescriptionManagement";
 import HODynamicReportPage from "./HealthOfficer/HODynamicReportPage";
 import AppointmentApprovePage from "./HealthOfficer/AppointmentApprovePage";
+import UpdateCardBill from "./cashier/UpdateCardBill";
 
 const RoleBasedViews = {
   admin: {
@@ -237,6 +238,11 @@ const RoleBasedViews = {
       "/finaicialreport": {
         label: "Financial Report",
         component: React.createElement(FinancialReport),
+        icons: FaMoneyBill,
+      },
+      "/cardbill": {
+        label: "Card Bill",
+        component: React.createElement(UpdateCardBill),
         icons: FaMoneyBill,
       },
       "/settings": {
