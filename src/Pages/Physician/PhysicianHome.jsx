@@ -152,6 +152,24 @@ const PhysicianHome = () => {
   // const userName = user.userName;
   const { user } = useContext(AuthContext);
 
+  const [patientData, setPatientData] = useState({
+    "PatientId": "",
+    "PhysicianId": user?.userName || "",
+    "Description": "",
+    "Treatment": "",
+    "Note": "",
+    "Allergies": ""
+  });
+
+   // Add this useEffect to sync PatientId
+   useEffect(() => {
+    setPatientData(prev => ({
+      ...prev,
+      PatientId: selectedPatient
+    }));
+  }, [selectedPatient]); // This will update PatientId when selection changes
+
+
   const fetchData = async () => {
     try {
       console.log('userName', user);
@@ -173,14 +191,7 @@ const PhysicianHome = () => {
     fetchData();
   }, []);
 
-  const [patientData, setPatientData] = useState({
-    "PatientId": selectedPatient,
-    "PhysicianId": user.userName,
-    "Description": "",
-    "Treatment": "",
-    "Note": "",
-    "Allergies": ""
-  });
+
 
   const handleChange = (key, value) => {
     setPatientData((prev) => ({ ...prev, [key]: value }));
@@ -188,14 +199,23 @@ const PhysicianHome = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('patientData: ', patientData);
-    try {
+    console.log('patientData: ', patientData, selectedPatient);
+    try { 
+      if(!selectedPatient){
+      setError("Please select patient");
+      return;
+    }
+      // patient.PatientId = selectedPatient;
+      // if(!patient.PatientId){
+      //   setError("Please select patient");
+      //   return;
+      // }
       const response = await apiUtility.post("/doctor/createMedicalRecord", patientData);
       if (response) {
         setError(response.message);
         if (response.status == true) {
           setPatientData({
-            "PatientId": selectedPatient,
+            "PatientId": "",
             "PhysicianId": user.userName,
             "Description": "",
             "Treatment": "",

@@ -3,6 +3,7 @@ import { Container, Typography, Paper, Grid, TextField, Button } from '@mui/mate
 import AdminTable from '../admin/AdminTable';
 import { apiUtility } from '../../components/repo/api';
 import { AuthContext } from '../../contexts/auth';
+import ExportTable from '../utils/ExportTable';
 
 const AppointmentApprovePage = () => {
     const [appointment, setData] = useState(null);
@@ -56,7 +57,7 @@ const AppointmentApprovePage = () => {
                         setIsError(true);
                     }
                 } catch (err) {
-                    setError(err.message);  
+                    setError(err.message);
                     setIsError(true);
                 }
             },
@@ -78,7 +79,7 @@ const AppointmentApprovePage = () => {
                         setIsError(true);
                     }
                 } catch (err) {
-                    setError(err.message);  
+                    setError(err.message);
                     setIsError(true);
                 }
             },
@@ -91,6 +92,7 @@ const AppointmentApprovePage = () => {
                 Appointment Approve Page
             </Typography>
             {error && <Typography variant="h6" color={isError != true ? "success" : "error"}>{error}</Typography>}
+            <ExportTable data={appointment} fileName="Pending Appointment Request from patient report" />
             <Paper elevation={3} style={{ padding: '20px', marginTop: '20px' }}>
                 <AdminTable data={appointment} actions={actions} columns={columns} />
             </Paper>
