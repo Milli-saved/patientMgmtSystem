@@ -124,17 +124,17 @@ const RoleBasedViews = {
         label: "Appointment",
         component: React.createElement(AppointmentPage),
         icons: FaHome,
-      },
-      "/prescription": {
-        label: "Prescription",
-        component: React.createElement(PrescriptionPage),
-        icons: FaHome,
-      },     
+      },   
       "/labtestrequest": {
         label: "lab Test Request",
         component: React.createElement(LabTestRequest),
         icons: FaTablets,
       },
+      "/prescription": {
+        label: "Prescription",
+        component: React.createElement(PrescriptionPage),
+        icons: FaHome,
+      },  
       "/settings": {
         label: "Manage Profile",
         component: React.createElement(PhysicianSettings),
@@ -179,21 +179,21 @@ const RoleBasedViews = {
         label: "Activate Patient",
         component: React.createElement(PatientActivation),
         icons: FaUser,
-      }
-      , "/feedback": {
-        label: "Feedback",
-        component: React.createElement(CashierFeedback),
-        icons: FaUserDoctor,
-      },
-      "/horeport":{
-        label: "Report",
-        component: React.createElement(HODynamicReportPage),
-        icons: FaHome,
       },
       "/approveappointment": {
         label: "Approve Appointment",
         component: React.createElement(AppointmentApprovePage),
         icons: FaHome,
+      },
+      "/horeport":{
+        label: "Report",
+        component: React.createElement(HODynamicReportPage),
+        icons: FaHome,
+      }
+      , "/feedback": {
+        label: "Feedback",
+        component: React.createElement(CashierFeedback),
+        icons: FaUserDoctor,
       },
        "/settings": {
         label: "Manage Profile",
@@ -232,7 +232,7 @@ const RoleBasedViews = {
     routes: {
       "/dashboard": {
         label: "Bill Records",
-        component: React.createElement(CashierDashboard),
+        component: React.createElement(UpdateCardBill),
         icons: FaHome,
       },
       "/finaicialreport": {
@@ -240,11 +240,11 @@ const RoleBasedViews = {
         component: React.createElement(FinancialReport),
         icons: FaMoneyBill,
       },
-      "/cardbill": {
-        label: "Card Bill",
-        component: React.createElement(UpdateCardBill),
-        icons: FaMoneyBill,
-      },
+      // "/cardbill": {
+      //   label: "Card Bill",
+      //   component: React.createElement(UpdateCardBill),
+      //   icons: FaMoneyBill,
+      // },
       "/settings": {
         label: "Manage Profile",
         component: React.createElement(PhysicianSettings),

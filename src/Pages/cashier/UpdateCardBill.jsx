@@ -115,7 +115,7 @@ const UpdateCardBill = () => {
         <>
             <Box mx={5} my={3}>
                 <Typography variant="h4" fontWeight="bold" mb={3}>
-                    Update Card Bill
+                    Bill Record
                 </Typography>
 
                 <FormControl fullWidth>
@@ -129,7 +129,7 @@ const UpdateCardBill = () => {
                     </Select>
                 </FormControl>
 
-                { labTests && (
+                {labTests && (
                     <>
                         <Typography variant="h6" mt={3}>Bill Service Records</Typography>
                         <TableContainer component={Paper}>
@@ -166,7 +166,7 @@ const UpdateCardBill = () => {
                 </FormControl>
 
                 <Button variant="contained" color="primary" onClick={handleUpdateStatus} sx={{ mt: 3 }}>
-                    Update Status
+                    Bill Record Udpated
                 </Button>
             </Box>
 
@@ -177,7 +177,7 @@ const UpdateCardBill = () => {
                 <Typography variant="h6" fontWeight="bold">
                     Bill Records
                 </Typography>
-                <ExportTable data={billData} fileName=" Card Bill Records" />
+                <ExportTable data={billData} fileName="Bill Records" />
                 <AdminTable data={billData} columns={columns} />
             </Box>
         </>

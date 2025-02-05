@@ -34,9 +34,12 @@ const PrescriptionPage = () => {
     const fetchPatients = async () => {
         try {
             // console.log('userName', user);
-            const response = await apiUtility.get(`/patient/getAllAssignPatient/${user.userName}`);
+            // const response = await apiUtility.get(`/patient/getAllAssignPatient/${user.userName}`);
+            const response = await apiUtility.get(`/prescription/getAllPendingPatientForPrescription/${user.userName}`);
             if (response.status == true)
                 setPatients(response.data);
+            else
+                setPatients([]);
             // console.log('user: ', patient);
         } catch (err) { }
     };
@@ -46,7 +49,7 @@ const PrescriptionPage = () => {
             const response = await apiUtility.get(`/prescription/getPrescriptionByDoctor/${user.userName}`);
             if (response.status == true)
                 setPrescription(response.data);
-            // console.log('setPrescription: ', patient);
+            console.log('setPrescription: ', response.data);
         } catch (err) { }
     }
 
@@ -83,6 +86,7 @@ const PrescriptionPage = () => {
                     setDuration('');
                     setInstructions('');
                     fetchAppointmentData();
+                    fetchPatients();
                 }
                 else {
                     toast.error(response.message);
@@ -107,6 +111,7 @@ const PrescriptionPage = () => {
         { label: "Dosage", field: "Dosage" },
         { label: "Duration", field: "Duration" },
         { label: "Instructions", field: "Instructions" },
+        { label: "Status", field: "status" },
     ];
 
     return (
