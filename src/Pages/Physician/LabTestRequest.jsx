@@ -282,7 +282,7 @@ const LabTestRequest = () => {
 
   const fetchLabTests = async () => {
     try {
-      const response = await apiUtility.get("/billService/getAll");
+      const response = await apiUtility.get("/billService/getAllForLabTest");
       const pending = await apiUtility.get("/labtest/getLabTestRequest/" + user.userName);
       const active = await apiUtility.get("/labtest/getLabTestRequestApproved/" + user.userName);
       console.log('response', response, pending, active);

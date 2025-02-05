@@ -34,8 +34,11 @@ const LabTest = () => {
   const fetchPatients = async () => {
     try {
       const response = await apiUtility.get(`/labtest/getLabTestRequestLB`);
-      if (response.status) setPatients(response.data);
+      if (response.status)
+        setPatients(response.data);
+      else setPatients([]);
     } catch (err) {
+      console.log('errorrrrr', err);
       setError("Unable to fetch patients");
     }
   };
@@ -76,6 +79,7 @@ const LabTest = () => {
         setResult("");
         setLabTests([]);
         fetchData();
+        setSelectedPatient();
       } else {
         setError("Unable to update lab tests");
       }

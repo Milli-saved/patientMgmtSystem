@@ -25,7 +25,7 @@ import AdminTable from "../admin/AdminTable";
 const UpdateCardBill = () => {
     const [patients, setPatients] = useState([]);
     const [selectedPatient, setSelectedPatient] = useState("");
-    const [labTests, setLabTests] = useState([]);
+    const [labTests, setLabTests] = useState(null);
     const [billData, setBillData] = useState([]);
     const [status, setStatus] = useState("unpaid");
     const { user } = useContext(AuthContext);
@@ -48,7 +48,9 @@ const UpdateCardBill = () => {
     const fetchLabTests = async (patientId) => {
         try {
             const response = await apiUtility.get(`/bill/getBillByPatient/${patientId}`);
-            if (response.status) setLabTests(response.data);
+            console.log('lab test', response.data[0].TypeDetails);
+
+            if (response.status) setLabTests(response.data[0]);
         } catch (err) {
             setError("Unable to fetch lab test records");
         }
@@ -83,7 +85,7 @@ const UpdateCardBill = () => {
                 setError("Status updated successfully");
                 fetchBillData();
                 fetchPatients();
-                setLabTests([]);
+                setLabTests(null);
                 setSelectedPatient("");
             } else {
                 setError("Unable to update status");
@@ -93,7 +95,8 @@ const UpdateCardBill = () => {
         }
     };
 
-    const totalAmount = labTests.reduce((sum, test) => sum + test.Amount, 0);
+    const totalAmount = labTests
+        && labTests.Amount;
 
     const columns = [
         { label: "Patient ID", field: "_id" },
@@ -126,7 +129,7 @@ const UpdateCardBill = () => {
                     </Select>
                 </FormControl>
 
-                {labTests.length > 0 && (
+                { labTests && (
                     <>
                         <Typography variant="h6" mt={3}>Bill Service Records</Typography>
                         <TableContainer component={Paper}>
@@ -134,14 +137,14 @@ const UpdateCardBill = () => {
                                 <TableHead>
                                     <TableRow>
                                         <TableCell>Bill Service</TableCell>
-                                        <TableCell>Amount</TableCell>
+                                        {/* <TableCell>Amount</TableCell> */}
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {labTests.map((test) => (
-                                        <TableRow key={test.BillId}>
-                                            <TableCell>Card</TableCell>
-                                            <TableCell>{test.Amount}</TableCell>
+                                    {labTests.TypeDetails.map((test) => (
+                                        <TableRow key={test.typeId}>
+                                            <TableCell>{test.typeName}</TableCell>
+                                            {/* <TableCell>{test.Amount}</TableCell> */}
                                         </TableRow>
                                     ))}
                                 </TableBody>
@@ -156,7 +159,7 @@ const UpdateCardBill = () => {
                     <InputLabel>Status</InputLabel>
                     <Select value={status} onChange={handleStatusChange}>
                         <MenuItem value="paid">Paid</MenuItem>
-                        <MenuItem value="unpaid">Unpaid</MenuItem>
+                        {/* <MenuItem value="unpaid">Unpaid</MenuItem> */}
                         <MenuItem value="tenaMedhin">TenaMedhin</MenuItem>
                         <MenuItem value="refunded">Refunded</MenuItem>
                     </Select>
