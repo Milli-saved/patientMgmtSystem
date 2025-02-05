@@ -215,6 +215,11 @@ const RoleBasedViews = {
         component: React.createElement(AssignPatientToDoctor),
         icons: FaUserDoctor,
       },
+      "/approveappointment": {
+        label: "Approve Appointment",
+        component: React.createElement(AppointmentApprovePage),
+        icons: FaHome,
+      },
       // "/referralslist": {
       //   label: "Access Referral",
       //   component: React.createElement(ReferralList),
