@@ -152,7 +152,8 @@ const AssignPatientToDocModal = ({onClose, patientInfo }) => {
   const loadDoctors = async () => {
     setLoading(true);
     const response = await apiUtility.get(`/patient/getDoctorList/${user.healthCenterId}`);
-    setDoctors(response.data); 
+    if (response.status)
+      setDoctors(response.data);
     setLoading(false);
   };
 

@@ -55,8 +55,15 @@ const AdminTable = ({ data, columns, actions }) => {
       date.DateOfBirth = new Date(date.DateOfBirth).toLocaleDateString();
     });
     console.log('data.DateOfBirth', data.DateOfBirth);
-
   }
+
+  if (data && data.length > 0 && data[0].assignedDate) {
+    data.map((date) => {
+      date.assignedDate = new Date(date.assignedDate).toLocaleDateString();
+    });
+    // console.log('data.assignedDate', data.assignedDate);
+  }
+  
   const rowsWithIds = data && data.map((row, index) => ({
     ...row,
     id: row._id || Math.round(),

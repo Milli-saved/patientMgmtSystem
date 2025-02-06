@@ -250,6 +250,8 @@ const PhysicianHome = () => {
     { label: "Treatment", field: "Treatment" },
     { label: "Note", field: "Note" },
     { label: "Allergies", field: "Allergies" },
+    { label: "Physician Name", field: "physicianName" },
+    { label: "Physician Phone Number", field: "physicianPhoneNumber" },
   ];
 
   const actions = [
