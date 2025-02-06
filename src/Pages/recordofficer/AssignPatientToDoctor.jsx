@@ -135,6 +135,9 @@ const AssignPatientToDoctor = () => {
     { label: "City", field: "City" },
     { label: "Phone Number", field: "phoneNumber" },
     { label: "Physician Id", field: "physicianId" },
+    { label: "Physician Name", field: "physicianName" },
+    { label: "Assigned Date", field: "assignedDate" },
+    { label: "Physician Phone Number", field: "physicianPhoneNumber" },
   ];
 
   const [assignData, setAssignData] = useState(null);

@@ -6,7 +6,6 @@ import AdminTable from "../admin/AdminTable";
 import ExportTable from "../utils/ExportTable";
 
 const FinancialReport = () => {
-    const [financialData, setFinancialData] = useState([]); // Financial data
     const [loading, setLoading] = useState(false); // Loading state
     const [error, setError] = useState(""); // Error message
     const { user } = useContext(AuthContext); // Authenticated user
@@ -31,17 +30,32 @@ const FinancialReport = () => {
     //         setLoading(false);
     //     }
     // };
+    const [billData, setBillData] = useState([]);
 
+    const fetchBillData = async () => {
+        try {
+            const response = await apiUtility.get(`/bill/getAllBillByHealthCenter/${user.healthCenterId}`);
+            if (response.status) setBillData(response.data);
+        } catch (err) {
+            setError("Unable to fetch bill data");
+        }
+    };
+    useEffect(() => {
+        fetchBillData();
+    }, []);
+    
     // Columns for the AdminTable
     const columns = [
-        { label: "Date", field: "date" },
-        { label: "Description", field: "description" },
-        { label: "Amount", field: "amount" },
-        { label: "Type", field: "type" },
-        { label: "Balance", field: "balance11" },
-        { label: "Paid By", field: "balance1" },
-        { label: "Payment Date", field: "balance2" },
-        { label: "Note", field: "balance3" },
+        { label: "Patient ID", field: "_id" },
+        { label: "billAmount", field: "billAmount" },
+        { label: "billStatus", field: "billStatus" },
+        { label: "Full Name", field: "patientName" },
+        { label: "Phone Number", field: "patientPhone" },
+        { label: "Email", field: "patientEmail" },
+        { label: "Sub city", field: "patientSubCity" },
+        { label: "Woreda", field: "patientWoreda" },
+        { label: "House Number", field: "patientHouseNumber" },
+        { label: "Emergency Contact", field: "patientEmergencyContact" },
     ];
 
     return (
@@ -61,10 +75,10 @@ const FinancialReport = () => {
                 ) : (
                     <>
                         <Box mb={3}>
-                            <ExportTable data={financialData} fileName="Financial Report" />
+                            <ExportTable data={billData} fileName="Financial Report" />
                         </Box>
                         <Paper>
-                            <AdminTable data={[]} columns={columns} />
+                            <AdminTable data={billData} columns={columns} />
                         </Paper>
                     </>
                 )}

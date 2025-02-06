@@ -29,14 +29,17 @@ const AppointmentApprovePage = () => {
     const columns = [
         { label: "Patient ID", field: "_id" },
         { label: "Appointment ID", field: "appointmentID" },
-        { label: "Full Name", field: "patientName" },
-        { label: "Email", field: "patientEmail" },
-        { label: "Woreda", field: "patientWoreda" },
-        { label: "Sub City", field: "patientSubCity" },
-        { label: "Phone Number", field: "patientPhone" },
+        { label: "Patient Full Name", field: "patientName" },
+        { label: "Patient Email", field: "patientEmail" },
+        { label: "Patient Woreda", field: "patientWoreda" },
+        { label: "Patient Sub City", field: "patientSubCity" },
+        { label: "Patient Phone Number", field: "patientPhone" },
         { label: "Appointment Date", field: "appointmentDate" },
         { label: "reason", field: "reason" },
         { label: "Status", field: "status" },
+        { label: "Physician Name", field: "physicianName" },
+        { label: "Physician Phone Number", field: "physicianPhone" },
+        // {label:"Physician Email", field:"p/hysicianEmail"}
     ];
 
     const actions = [

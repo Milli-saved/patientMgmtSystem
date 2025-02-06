@@ -263,7 +263,9 @@ const Referrals = () => {
   const fetchInitialData = async () => {
     try {
       const patientResponse = await apiUtility.get(`/patient/getAllAssignPatient/${user.userName}`);
-      const doctorResponse = await apiUtility.get(`/patient/getDoctorList/${user.healthCenterId}`);
+      const doctorResponse = await apiUtility.post(`/patient/getDoctorListwithExeption/${user.healthCenterId}`, {
+        "userName": user.userName
+      });
       const referralResponse = await apiUtility.get(`/referral/getAllReferral/${user.userName}`);
       const incomingReferralResponse = await apiUtility.get(`/referral/getAllReferralForHim/${user.userName}`);
 
@@ -328,15 +330,16 @@ const Referrals = () => {
     { label: "EmergencyContact", field: "EmergencyContact" },
     { label: "Reason", field: "reason" },
     { label: "Email", field: "Email" },
-    { label: "phoneNumber", field: "phoneNumber" },
-    { label: "Referred To", field: "referredTo" },
+    { label: "Patient phone Number", field: "phoneNumber" },
+    { label: "Referred To", field: "fullName" },
+    { label: "Physician Phone Number", field: "physicianPhoneNumber" },
   ];
 
   const incomingReferralColumns = [
-    { label: "Referral ID", field: "referralId" },
+    { label: "Referral ID", field: "referralID" },
     { label: "Patient Id", field: "patientId" },
     { label: "Patient Name", field: "patientName" },
-    { label: "Referred To", field: "DateOfBirth" },
+    { label: "Date of birth", field: "DateOfBirth" },
     { label: "Gender", field: "Gender" },
     { label: "City", field: "City" },
     { label: "subCity", field: "subCity" },
@@ -346,7 +349,43 @@ const Referrals = () => {
     { label: "Reason", field: "reason" },
     { label: "Email", field: "Email" },
     { label: "phoneNumber", field: "phoneNumber" },
-    { label: "Referred To", field: "referredTo" },
+    { label: "Referred From", field: "refereFromfullName" },
+    { label: "Referrer Phone Number", field: "refereFromphoneNumber" },
+  ];
+
+
+  const actions = [
+    {
+      label: "Accept",
+      color: "green",
+      onClick: async (row) => {
+        console.log("Accept  for:", row);
+        // return;
+        try {
+
+          const formData = {
+            "patientId": row.patientId,
+            "physicianId": user.userName,
+            "healthCenterId": user.healthCenterId,
+          }
+
+          const response = await apiUtility.post(`/patient/assignDoctor`, formData);
+          // console.log('assign patient', response.status);
+          if (response.status == true) {
+            await apiUtility.post(`/referral/updateReferral/${row.referralID}`, {
+              "status": "accepted"
+            })
+            setError("Referal Accepted successfully");
+            fetchInitialData();
+
+          } else {
+            setError("Unable to accept referral.");
+          }
+        } catch (err) {
+          setError(err.message);
+        }
+      },
+    },
   ];
 
   return (
@@ -355,7 +394,7 @@ const Referrals = () => {
         <Tab label="Make Referral" />
         <Tab label="Get Referrals" />
       </Tabs>
-
+      {error && error}
       {tabIndex === 0 && (
         <Box mx={5} my={3}>
           <Paper elevation={3} sx={{ padding: 4 }}>
@@ -413,7 +452,7 @@ const Referrals = () => {
           <Box mt={3}>
             <Typography variant="h6">Outgoing Referrals</Typography>
             <Typography>
-              <ExportTable data={referrals} fileName="Referral list of outgoing"/>
+              <ExportTable data={referrals} fileName="Referral list of outgoing" />
             </Typography>
             <AdminTable columns={referralColumns} data={referrals} />
           </Box>
@@ -428,7 +467,7 @@ const Referrals = () => {
           <Typography>
             <ExportTable data={incomingReferrals} fileName="Incoming referral"></ExportTable>
           </Typography>
-          <AdminTable columns={incomingReferralColumns} data={incomingReferrals} />
+          <AdminTable columns={incomingReferralColumns} data={incomingReferrals} actions={actions} />
         </Box>
       )}
     </Box>
