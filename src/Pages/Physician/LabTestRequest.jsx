@@ -273,7 +273,9 @@ const LabTestRequest = () => {
 
   const fetchPatients = async () => {
     try {
-      const response = await apiUtility.get(`/labtest/getAllNotInLabTestPatient/${user.healthCenterId}`);
+      const response = await apiUtility.post(`/labtest/getAllNotInLabTestPatient/${user.healthCenterId}`, {
+        "userName": user.userName
+      });
       if (response.status) setPatients(response.data);
     } catch (err) {
       setError("Unable to fetch patients");
