@@ -150,6 +150,7 @@ const PharmacistPrescriptionManagement = () => {
         { label: "Instructions", field: "Instructions" },
         { label: "Status", field: "Status" },
         { label: "PrescriptionID", field: "PrescriptionID" },
+        { label: "Prescription By Doctor Name", field: "createrName" }
     ];
     const columns1 = [
         { label: "Patient ID", field: "_id" },
@@ -163,6 +164,7 @@ const PharmacistPrescriptionManagement = () => {
         { label: "Instructions", field: "Instructions" },
         { label: "Status", field: "status" },
         { label: "PrescriptionID", field: "PrescriptionID" },
+        { label: "Prescription By Doctor Name", field: "createrName" }
     ];
     const actions = [
         {
@@ -172,6 +174,8 @@ const PharmacistPrescriptionManagement = () => {
                 console.log("Update clicked for:", row);
                 setData(row);
                 setAssignPatientModal(true);
+                fetchPrescriptions();
+                fetchApprovedPrescription();
             },
         }
     ];
