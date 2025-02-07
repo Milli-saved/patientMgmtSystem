@@ -364,6 +364,7 @@ const LabTestRequest = () => {
     { label: "Email", field: "patientEmail" },
     { label: "Phone Number", field: "patientPhone" },
     { label: "Status", field: "status" },
+    { label: "Lab Test Type", field: "Type" }
   ];
 
   return (
