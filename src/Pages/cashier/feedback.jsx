@@ -28,9 +28,9 @@ const feedback = () => {
 
   const columns = [
     { label: "Feedback ID", field: "feedbackID" },
-    { label: "Date", field: "date" },
+    { label: "Date", field: "feedbackDate" },
     { label: "Content", field: "content" },
-    { label: "To", field: "toWhom" },
+    { label: "To", field: "to" },
     { label: "Full Name", field: "patientName" },
     { label: "Phone Number", field: "patientPhone" },
     { label: "Email", field: "patientEmail" },
