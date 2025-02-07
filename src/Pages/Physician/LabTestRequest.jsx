@@ -367,6 +367,24 @@ const LabTestRequest = () => {
     { label: "Lab Test Type", field: "Type" }
   ];
 
+  const columnsUpdated = [
+    { label: "Patient ID", field: "_id" },
+    { label: "Record ID", field: "TestID" },
+    { label: "Full Name", field: "patientName" },
+    { label: "Date Of Birth", field: "DateOfBirth" },
+    { label: "Gender", field: "Gender" },
+    { label: "City", field: "City" },
+    { label: "subCity", field: "patientSubCity" },
+    { label: "Woreda", field: "patientWoreda" },
+    { label: "House Number", field: "patientHouseNumber" },
+    { label: "Emergency Contact", field: "patientEmergencyContact" },
+    { label: "Email", field: "patientEmail" },
+    { label: "Phone Number", field: "patientPhone" },
+    { label: "Status", field: "status" },
+    { label: "Lab Test Type", field: "Type" },
+    { label: "Note from Lab Tech", field: "Note" },
+    { label: "Result of Lab Test", field: "Result" }
+  ];
   return (
     <>
       <Box mx={5} my={3}>
@@ -465,7 +483,7 @@ const LabTestRequest = () => {
         <Box sx={{ m: "16", p: 5 }}>
           <Typography variant="h5">Updated Lab Test Requests</Typography>
           <ExportTable data={[]} fileName="Updated_Lab_Test_Requests" />
-          <AdminTable data={activelabTests} columns={columns} />
+          <AdminTable data={activelabTests} columns={columnsUpdated} />
         </Box>
       )}
     </>
